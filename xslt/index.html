@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><html xmlns:qml="www.qml.uni-siegen.de">
+   <head>
+      <title>Titel des Fragebogens</title>
+      <link href="style.css" rel="styleSheet" type="text/css"></link>
+      <script type="text/javascript" language="JavaScript" src="script.js"></script>
+   </head>
+   <body>
+      <h1>Titel des Fragebogens</h1>
+      <p class="pages">Teil 1 von 2</p>
+      <form action="out2.html" method="post">
+         <input type="hidden" name="qid" value="###qid###"></input>
+         <input type="hidden" name="qstnSec" value="1"></input>
+         <h2>Abschnittsüberschrift</h2>
+         <div class="group">
+            <p class="number">1.</p>
+            <p class="question">Welches Geschlecht haben Sie?</p>
+            <table class="vertical">
+               <tr>
+                  <th class="answer">weiblich</th>
+                  <td class="answer">
+                     <input type="radio" name="V1" value="1" onclick="javascript:clearTextFields('V1')"></input>
+                  </td>
+               </tr>
+               <tr>
+                  <th class="answer">männlich</th>
+                  <td class="answer">
+                     <input type="radio" name="V1" value="2" onclick="javascript:clearTextFields('V1')"></input>
+                  </td>
+               </tr>
+            </table>
+            <p class="number">2.</p>
+            <p class="question">Was hat Sie bewogen, nach dem Studienabschluss ein Praktikum aufzunehmen?</p>
+            <p class="instructionItem">Mehrfachnennung möglich</p>
+            <table class="vertical">
+               <tr>
+                  <th class="answer">Ich hatte mich vergeblich um eine Arbeitsstelle bemüht</th>
+                  <td class="answer">
+                     <input type="checkbox" name="V2_1"></input>
+                  </td>
+               </tr>
+               <tr>
+                  <th class="answer">Ich glaube über ein Praktikum schneller in eine Beschäftigung zu gelangen</th>
+                  <td class="answer">
+                     <input type="checkbox" name="V2_2"></input>
+                  </td>
+               </tr>
+               <tr>
+                  <th class="answer">ich wollte mich praktisch qualifizieren</th>
+                  <td class="answer">
+                     <input type="checkbox" name="V2_3"></input>
+                  </td>
+               </tr>
+               <tr>
+                  <th class="answer">Sonstiges</th>
+                  <td class="answer">
+                     <input type="checkbox" name="V2_4"></input>
+                  </td>
+               </tr>
+            </table>
+            <p class="number">3.</p>
+            <p class="question">Haben Sie weitere Anmerkungen?</p>
+            <p class="instructionItem">Sie haben 500 Zeichen zur Verfügung</p>
+            <table class="vertical">
+               <tr>
+                  <th class="oneAnswer"></th>
+                  <td class="answerVerticalOpen">
+                     <textarea class="textarea" name="V3o1" rows="5" cols="50" onkeydown="" onkeyup="javascript:chklen(V3o1, '250')"></textarea>
+                  </td>
+               </tr>
+            </table>
+         </div>
+         <input type="submit" name="next" value="Weiter zur nächsten Seite"></input>
+      </form>
+   </body>
+</html>

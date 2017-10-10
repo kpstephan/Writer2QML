@@ -1,0 +1,584 @@
+/* Allgemeine Formatierungen */
+	
+	
+	html, body 
+	{
+	padding: 0;
+	margin-top: 1%;
+	margin-left: 1%;
+	margin-right: 1%;
+	margin-bottom: 1%;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 1em;
+	line-height: 150%;
+	background-color: white;
+	color: black;
+	}
+	
+	h1 
+	{
+	font-size: 130%;
+	text-align: center;
+	padding: 8px;
+	margin-bottom: 30px;
+	background-color: #CCCCFF;
+	color:black;
+	}
+	
+	h2 
+	{
+	font-size: 110%;
+	font-weight:bold;
+text-decoration:underline;
+	text-align: left;
+	margin:0px;
+	margin-bottom:15px;
+	padding:0px;
+	}
+	
+	div
+	{
+	margin:0px;
+	padding:0px;
+	}
+	
+	div.group
+	{
+padding:15px;
+padding-top:0px;
+	border: 1px solid black;
+	margin-bottom: 50px;
+	margin-top:5px;
+
+	}
+	
+	div.section
+	{
+	margin:0px;
+	margin-bottom:40px;
+	padding:0px;
+	font-size:110%;
+	line-height:130%;
+	text-align:left;
+	}
+	
+	div.questionnaire
+	{
+	background-color:#CCCCFF;
+font-weight:bold;
+	color:black;
+	margin-bottom:50px;
+	padding:15px;
+	padding-top:0px;
+	font-size:115%;
+	line-height:130%;
+	text-align:left;
+	}
+	
+	p
+	{
+	margin:0px;
+	padding:0px;
+	}
+	
+	
+	p.introQuestionnaire
+	{
+	padding-top:15px;
+	}
+	
+	p.textPar
+	{
+	padding-top:5px;
+	}
+	
+	p.instructionQuestionnaire
+	{
+	font-style:italic;
+	padding-top:15px;
+	}
+	
+	p.adQuestionnaire
+	{
+	padding-top:15px;
+	}
+	
+	p.introSection
+	{
+	padding-top:10px;
+	}
+	
+	p.instructionSection
+	{
+	font-style:italic;
+	padding-top:10px;
+	}
+	
+	p.adSection
+	{
+	padding-top:10px;
+	}
+	
+	p.adItem
+	{
+	padding:0px;
+	margin:0px;
+	margin-left:30px;
+	text-align:left;
+	}
+	
+	p.introItem
+	{
+	padding:0px;
+	margin:0px;
+	margin-left:30px;
+	text-align:left;
+	}
+	
+	p.instructionItem
+	{
+	font-style:italic;
+	padding:0px;
+	margin:0px;
+	margin-left:30px;
+	text-align:left;
+	}
+	
+	p.question
+	{
+	font-weight: bold;
+	font-size:105%;
+	padding:0px;
+	margin:0px;
+	margin-left:30px;
+	text-align:left;
+	}
+	
+	p.number
+	{
+	font-weight: bold;
+	font-size:105%;
+	padding:0px;
+	margin:0px;
+	margin-right: 10px;
+	text-align:left;
+	float:left;
+	}
+	
+	p.pages
+	{
+	font-weight: bold;
+	text-align:right; 
+	padding-right:2em;
+	}
+		
+	table
+	{
+	font-weight: normal;
+	margin-bottom: 40px;
+	margin-top: 10px;
+	border-collapse: collapse;
+	background-color:white;
+	color:black;
+	border: none;
+	}
+	
+	table th.answer
+	{
+	background-color: #CCCCFF;
+	color:black;
+	border: 1px solid black;
+	text-align:left;
+	font-size: 80%;
+	padding: 5px;
+	}
+	
+	table th.answerDifferential
+	{
+	background-color: #CCCCFF;
+	color:black;
+	border: 1px solid black;
+	text-align:center;
+	font-size: 80%;
+	padding: 5px;
+	}
+	
+	table td.answer
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+               text-align:center;
+               padding: 5px;
+	}
+	
+	table td.answerVerticalOpen
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+               text-align: left;
+               padding: 5px;
+	}
+	
+	table th.oneAnswer
+	{
+	background-color: white;
+	color:black;
+	border: none;
+	text-align:left;
+	font-size: 80%;
+	padding: 5px;
+	}
+	
+	table th.answerEmpty
+	{
+	background-color: #CCCCFF;
+	color:black;
+	border: 1px solid black;
+	text-align:left;
+	font-size: 80%;
+	padding: 5px;
+	}
+	
+	table th.responsesIntro
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+	text-align:left;
+	font-size: 75%;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 2px;
+	padding-top:8px;
+	}
+	
+	table th.nonOpinion
+	{
+	background-color: #CCCCFF;
+	color:black;
+	border: 1px solid black;
+	text-align:left;
+	font-size: 80%;
+	padding: 5px;
+	}	
+	
+	table th.blindVertical
+	{
+	background-color: white;
+	color:black;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	text-align:left;
+	font-size: 80%;
+	height: 30px;
+	}
+		
+	table td.blindVertical
+	{
+	background-color: white;
+	color:black;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+               text-align:center;
+               height: 30px;
+	}
+	
+	table td.nonOpinion
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+               text-align:center;
+	}
+		
+	table th.likert_first
+	{
+	background-color: #CCCCFF;
+	color:black;
+	border: 1px solid black;
+	text-align:center;
+	font-size: 80%;
+	padding: 5px;
+	}
+	
+	table th.likert_last
+	{
+	background-color: #CCCCFF;
+	color:black;
+	border: 1px solid black;
+	text-align:center;
+	font-size: 80%;
+	padding: 5px;
+	}
+	
+	table th.likert_scale
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+               text-align:center;
+               height: 30px;
+               width: 45px;
+               font-weight:normal;
+	}
+	
+	table td.likert_scale
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+               text-align:center;
+               height:30px;
+               width:45px;
+	}
+	
+	table th.blindHorizontal
+	{
+	background-color: white;
+	color:black;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	text-align:left;
+	font-size: 80%;
+	width: 30px;
+	}
+	
+	table td.blindHorizontal
+	{
+	background-color: white;
+               color:black;
+               text-align:center;
+               border-left: 1px solid black;
+	border-right: 1px solid black;
+	width: 30px;
+	}
+	
+	table th.topleft
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+	text-align:left;
+	font-size: 80%;
+	padding: 5px;
+	}
+	
+	table th.question
+	{
+	background-color: #CCCCFF;
+	color:black;
+	border: 1px solid black;
+	text-align:left;
+	font-size: 80%;
+	padding: 5px;
+	}
+	
+/* ##################################################################################################*/	
+	/*
+
+	
+	
+	div.matrix 
+	{
+	margin-bottom: 50px;
+	border: 1px solid black;
+	padding-left: 5px;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 10px;
+	}
+	
+		table th.answerEmpty
+	{
+	background-color: white;
+	color:black;
+	border: none;
+	text-align:left;
+	}
+	
+
+	table.horizontal th.answer
+	{
+	background-color: #CCCCFF;
+	color:black;
+	border: 1px solid black;
+	text-align:center;
+	font-size: 80%;
+	padding: 5px;
+	}*/
+	
+	
+	
+	/**/
+	
+
+	
+	/*table.horizontal th.nonopinion
+	{
+	background-color: #CCCCFF;
+	color:black;
+	border: 1px solid black;
+	text-align:center;
+	font-size: 80%;
+	padding: 5px;
+	}*/
+	
+
+	
+	/*table.horizontal th.scale_begin
+	{
+	background-color: #CCCCFF;
+	color:black;
+	border: 1px solid black;
+	text-align:right;
+	font-size: 80%;
+	padding: 5px;
+	}
+	
+
+	
+	table.horizontal th.scale_empty
+	{
+	background-color: #CCCCFF;
+	color:black;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	text-align:left;
+	font-size: 80%;
+	width:30px;
+	}
+	
+	table.vertical th.scale_empty
+	{
+	background-color: #CCCCFF;
+	color:black;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	text-align:left;
+	font-size: 80%;
+	}
+	
+	table th.scale_end
+	{
+	background-color: #CCCCFF;
+	color:black;
+	border: 1px solid black;
+	text-align:left;
+	font-size: 80%;
+	padding: 5px;
+	}
+	
+	table th.scale_question
+	{
+	background-color: #CCCCFF;
+	color:black;
+	border: 1px solid black;
+	text-align:left;
+	font-size: 80%;
+	padding: 5px;
+	}
+	
+	table th.topleft
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+	text-align:left;
+	font-size: 80%;
+	padding: 5px;
+	}*/
+	
+/* ##################################################################################################*/	
+	
+	/*table td.addon
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+               text-align:left;
+               padding: 5px;
+	}*/
+	
+
+	
+	/*table.horizontal td.answerbig
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+               text-align:center;
+               padding: 5px;
+	}
+	
+	table.vertical td.answerbig
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+               text-align:left;
+               padding: 5px;
+	}
+	
+*/
+	
+
+	
+	/*table.horizontal td.scale_begin
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+               text-align:right;
+               padding: 5px;
+	}
+	
+	table.vertical td.scale_begin
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+               text-align:center;
+               padding: 5px;
+	}
+	
+	table.horizontal td.scale_end
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+               text-align:left;
+               padding: 5px;
+	}
+	
+	table.vertical td.scale_end
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+               text-align:center;
+               padding: 5px;
+	}
+	
+	table.horizontal td.scale_item
+	{
+	background-color: white;
+	color:black;
+	border: 1px solid black;
+               text-align:center;
+               width:30px;
+	}
+	
+*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

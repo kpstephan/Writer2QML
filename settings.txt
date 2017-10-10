@@ -1,0 +1,3 @@
+#configuration settings
+lastWriterDir=/home/stephan/devel/Writer2QML/input-files
+lastOpenedFile=/home/stephan/devel/Writer2QML/input-files/Fragebogen1.odt

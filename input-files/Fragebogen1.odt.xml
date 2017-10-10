@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<qml:questionnaire xmlns:qml="www.qml.uni-siegen.de" version="1.2" title="Titel des Fragebogens" id="qstnId">
+
+
+ <qml:section id="S1" type="page">
+
+
+     <qml:section id="S2" type="group" title="Abschnittsüberschrift">
+
+         <qml:item id="V1">
+             <qml:question>Welches Geschlecht haben Sie?</qml:question>
+             <qml:responses type="single" orientation="vertical">
+                 <qml:choice id="V1C1" type="closed" value="1">weiblich</qml:choice>
+                 <qml:choice id="V1C2" type="closed" value="2">männlich</qml:choice>
+             </qml:responses>
+         </qml:item>
+
+         <qml:item id="V2">
+             <qml:question>Was hat Sie bewogen, nach dem Studienabschluss ein Praktikum aufzunehmen?</qml:question>
+             <qml:instruction>Mehrfachnennung möglich</qml:instruction>
+             <qml:responses type="multiple" orientation="vertical">
+                 <qml:choice id="V2C1" type="closed">Ich hatte mich vergeblich um eine Arbeitsstelle bemüht</qml:choice>
+                 <qml:choice id="V2C2" type="closed">Ich glaube über ein Praktikum schneller in eine Beschäftigung zu gelangen</qml:choice>
+                 <qml:choice id="V2C3" type="closed">ich wollte mich praktisch qualifizieren</qml:choice>
+                 <qml:choice id="V2C4" type="closed">Sonstiges</qml:choice>
+             </qml:responses>
+         </qml:item>
+
+         <qml:item id="V3">
+             <qml:question>Haben Sie weitere Anmerkungen?</qml:question>
+             <qml:instruction>Sie haben 500 Zeichen zur Verfügung</qml:instruction>
+             <qml:responses type="single" orientation="vertical">
+                 <qml:choice id="V3C1" type="open" length="250"></qml:choice>
+             </qml:responses>
+         </qml:item>
+
+     </qml:section>
+
+ </qml:section>
+
+
+ <qml:section id="S3" type="page">
+
+     <qml:matrix id="M4">
+         <qml:matrixQuestion>Einführungstext zur Frage.</qml:matrixQuestion>
+         <qml:item id="M4V1">
+             <qml:question>Aussage 1</qml:question>
+             <qml:responses type="single" orientation="horizontal">
+                 <qml:choice id="M4V1C1" type="closed" value="1">Kategorie 1</qml:choice>
+                 <qml:choice id="M4V1C2" type="closed" value="2">Kategorie 2</qml:choice>
+                 <qml:choice id="M4V1C3" type="closed" value="3">Kategorie 3</qml:choice>
+                 <qml:choice id="M4V1C4" type="nonOpinion" value="4">Keine Antwort möglich</qml:choice>
+             </qml:responses>
+         </qml:item>
+         <qml:item id="M4V2">
+             <qml:question>Aussage 2</qml:question>
+             <qml:responses type="single" orientation="horizontal">
+                 <qml:choice id="M4V2C1" type="closed" value="1">Kategorie 1</qml:choice>
+                 <qml:choice id="M4V2C2" type="closed" value="2">Kategorie 2</qml:choice>
+                 <qml:choice id="M4V2C3" type="closed" value="3">Kategorie 3</qml:choice>
+                 <qml:choice id="M4V2C4" type="nonOpinion" value="4">Keine Antwort möglich</qml:choice>
+             </qml:responses>
+         </qml:item>
+         <qml:item id="M4V3">
+             <qml:question>Aussage 3</qml:question>
+             <qml:responses type="single" orientation="horizontal">
+                 <qml:choice id="M4V3C1" type="closed" value="1">Kategorie 1</qml:choice>
+                 <qml:choice id="M4V3C2" type="closed" value="2">Kategorie 2</qml:choice>
+                 <qml:choice id="M4V3C3" type="closed" value="3">Kategorie 3</qml:choice>
+                 <qml:choice id="M4V3C4" type="nonOpinion" value="4">Keine Antwort möglich</qml:choice>
+             </qml:responses>
+         </qml:item>
+     </qml:matrix>
+
+     <qml:item id="V5">
+         <qml:question>Likertskala</qml:question>
+         <qml:responses type="single" orientation="horizontal" likert="true" showValues="true" scalepoints="5">
+             <qml:choice id="V5C1" type="closed" position="first" value="5">stimme zu</qml:choice>
+             <qml:choice id="V5C2" type="closed" position="last" value="1">lehne ab</qml:choice>
+         </qml:responses>
+ </qml:item>
+
+</qml:section>
+
+</qml:questionnaire>
