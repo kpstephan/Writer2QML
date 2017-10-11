@@ -35,7 +35,7 @@ import java.util.Iterator;
 	public class Item extends QstnComponent{
 
 		//Item kann intro, instruction, question und choices aufnehmen
-		private ArrayList QstnComponents = new ArrayList();
+		private ArrayList<QstnComponent> QstnComponents = new ArrayList<QstnComponent>();
 
 		//Variablen und Objekte sollten gekapselt werden
 		//Erläuterung private- und qstn-objeke
@@ -54,10 +54,10 @@ import java.util.Iterator;
 		//QstnObjekt oder "Itemobjekt"?
 	    public boolean choices_multiple;
 
-	    public ArrayList categories;
+	    public ArrayList<Category> categories;
 	    //constructor
 	    public Item(){
-	    	this.categories = new ArrayList();
+	    	this.categories = new ArrayList<Category>();
 
 	    }
 
@@ -91,7 +91,7 @@ import java.util.Iterator;
 
 
 		//Externer Iterator Iteriert über alle QstnComponent-Objekte
-		public Iterator iterator(){
+		public Iterator<QstnComponent> iterator(){
 			return new QstnIterator( QstnComponents.iterator() );
 		}
 
@@ -103,7 +103,7 @@ import java.util.Iterator;
 			System.out.println("--Item T:" + choiceType + "--");
 
 			//Hier Ausgabe der Kinder
-			Iterator it = QstnComponents.iterator();
+			Iterator<QstnComponent> it = QstnComponents.iterator();
 
 			while( it.hasNext()){
 

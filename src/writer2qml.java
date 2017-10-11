@@ -29,14 +29,11 @@
  *
  */
 
-
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,28 +50,44 @@ import java.util.zip.ZipFile;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.swt.layout.*;
+
 import org.eclipse.swt.SWT;
-//import org.eclipse.swt.custom.*;
-//import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.LineStyleEvent;
 import org.eclipse.swt.custom.LineStyleListener;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.*;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.events.MouseTrackListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.xml.sax.helpers.DefaultHandler;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 
 import model.qstn.Model2QmlConverter;
 
@@ -521,7 +534,7 @@ public class writer2qml {
 
 	  public void lineGetStyle(LineStyleEvent event) {
 
-		  ArrayList styles = new ArrayList();
+		  ArrayList<StyleRange> styles = new ArrayList<StyleRange>();
 
 		  //Farben für Syntax-Highlighting
 		  Color red = display.getSystemColor( SWT.COLOR_DARK_RED );
@@ -821,19 +834,6 @@ public class writer2qml {
   }
 
 
-  private void writeStringtoFile( String fileName, String fileContent){
-
-	   BufferedWriter f;
-	   try{
-		   f = new BufferedWriter( new FileWriter( fileName ) );
-		   f.write( fileContent );
-		   f.close();
-
-	   }catch( IOException e){
-		   //Fehler behandeln
-	   }
-
-  }
 
 
 
@@ -917,32 +917,6 @@ public class writer2qml {
   }//Listener
 
 
-  //Liest Datei in String
-  //Furchtbar uneffizient, viele Strings
-  private String readTextFile( String fileName){
-
-	  StringBuffer sb = new StringBuffer("");
-
-	  BufferedReader r;
-	  String line;
-
-	  try{
-	      r = new BufferedReader( new FileReader( fileName ));
-	      while( ( line = r.readLine()) != null ){
-	    	  sb.append( line + ls );
-
-	      }
-	      r.close();
-
-	  }catch(IOException e){
-		  //Behandeln
-		  e.printStackTrace();
-	  }
-
-	  return sb.toString();
-
-
-  }
 
 
   // Copies src file to dst file.
@@ -1590,6 +1564,7 @@ public class writer2qml {
 	  */
 
 
+
 	   ZipFile zf = new ZipFile( fileName );
 	   //Titel aus style.xml lesen
 	   //style.xml aus Archiv öffnen
@@ -1802,7 +1777,7 @@ public class writer2qml {
 	   //Iterator über Fehler initialisieren
 	   //currentError referenziert erstes Fehlerobjekt oder Null
 	   StyleCodingError currentError;
-	   Iterator errorIt = handler.codingErrors.iterator();
+	   Iterator<StyleCodingError> errorIt = handler.codingErrors.iterator();
 	   if( errorIt.hasNext()){
 		   currentError = ( StyleCodingError ) errorIt.next();
 	   } else
@@ -1810,7 +1785,7 @@ public class writer2qml {
 
 
 	   //Über alle Absätze iterieren
-	   Iterator parIt = handler.writerContentBuffer.iterator();
+	   Iterator<WriterParagraph> parIt = handler.writerContentBuffer.iterator();
 
  //Absatzzähler: Besser Absatznummer als Instanzvariable von Absatz?
 	   int parCounter=0;
@@ -1975,8 +1950,10 @@ public class writer2qml {
 
 
 
+
 	  //Das muss doch bestimmt nach oben??
 	  //Verschiedenen Fehler, Zip, Parser, Datei unterscheiden und abfangen
+	   zf.close();
 	 } catch( Throwable t ) {
 
 		 //TDO später löschen

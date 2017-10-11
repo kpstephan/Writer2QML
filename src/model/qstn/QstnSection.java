@@ -35,7 +35,7 @@ public class QstnSection extends QstnComponent{
 	public final static int TYPE_SECTION = 2;
 
 	private String name;
-    private ArrayList QstnComponents = new ArrayList();
+    private ArrayList<QstnComponent> QstnComponents = new ArrayList<QstnComponent>();
 
     //Section Eigenschaften
     private String title = "";
@@ -116,7 +116,7 @@ public class QstnSection extends QstnComponent{
 
 
 	public QstnComponent getChild( int i){
-		return (QstnComponent)  QstnComponents.get( i );
+		return QstnComponents.get( i );
 	}
 
 
@@ -128,7 +128,7 @@ public class QstnSection extends QstnComponent{
 	//wird verwendet, um über alle Kinder iterieren zu können
 	//wird nur von Section, nicht in QstnComponent deklariert
 	//später ändern?
-	public Iterator getChildren(){
+	public Iterator<QstnComponent> getChildren(){
 		return QstnComponents.iterator();
 	}
 
@@ -149,7 +149,7 @@ public class QstnSection extends QstnComponent{
 
 
 	//Externer Iterator Iteriert über alle QstnComponent-Objekte
-	public Iterator iterator(){
+	public Iterator<QstnComponent> iterator(){
 		return new QstnIterator( QstnComponents.iterator() );
 	}
 
@@ -159,11 +159,11 @@ public class QstnSection extends QstnComponent{
 
 		System.out.println("Section: " + getName());
 		//Hier Ausgabe der Kinder
-		Iterator it = QstnComponents.iterator();
+		Iterator<QstnComponent> it = QstnComponents.iterator();
 
 		while( it.hasNext()){
 
-			QstnComponent qstnComponent = (QstnComponent) it.next();
+			QstnComponent qstnComponent = it.next();
 			qstnComponent.printComponent();
 		}
 

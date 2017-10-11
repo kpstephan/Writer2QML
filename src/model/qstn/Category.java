@@ -32,7 +32,7 @@ public class Category {
 
 	private String text = "";
 	private boolean open = false;
-	private int value = 0;
+	//private int value = 0;
 	private int length = 50;
 	private boolean nonOpinion = false;
 

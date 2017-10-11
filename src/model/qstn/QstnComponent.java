@@ -61,7 +61,7 @@ public class QstnComponent {
 	}
 
 
-	public Iterator iterator(){
+	public Iterator<QstnComponent> iterator(){
 		throw new UnsupportedOperationException();
 	}
 

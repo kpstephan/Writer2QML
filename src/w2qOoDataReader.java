@@ -43,23 +43,22 @@
 	 */
 
 
-
-
-
-	import java.io.*;
 	import java.util.ArrayList;
-    import java.util.HashMap;
-	import java.util.Iterator;
-	import java.util.zip.*;
-	import javax.xml.parsers.*;
-    import org.eclipse.swt.SWT;
-    import org.eclipse.swt.widgets.MessageBox;
-	import org.xml.sax.*;
-	import org.xml.sax.helpers.DefaultHandler;
+import java.util.HashMap;
 
-import model.qstn.*;
-
+import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import model.qstn.Category;
+import model.qstn.Item;
+import model.qstn.Qstn;
+import model.qstn.QstnChoices;
+import model.qstn.QstnInstruction;
+import model.qstn.QstnIntro;
+import model.qstn.QstnQuestion;
+import model.qstn.QstnSection;
 
 	public class w2qOoDataReader extends DefaultHandler{
 
@@ -83,46 +82,48 @@ import org.xml.sax.Locator;
 
         private boolean debugMode = false;
 
-		private int valueCount;
+		//private int valueCount;
+		@SuppressWarnings("unused")
 		private Locator locator;
 
 		//q&d zum weiterreichen des Dateinamens
+		@SuppressWarnings("unused")
 		private String aFileName;
 
 		private Qstn qstn;
 
 	    //Listen zum Speichern der Formatvorlagen Namen
 
-		ArrayList qstnTitleTags;
-		ArrayList introTags;
-		ArrayList introItemTags;
+		ArrayList<String> qstnTitleTags;
+		ArrayList<String> introTags;
+		ArrayList<String> introItemTags;
 
-		ArrayList captionTags;
-		ArrayList captionNewPageTags;
+		ArrayList<String> captionTags;
+		ArrayList<String> captionNewPageTags;
 
-		ArrayList questionTags;
-		ArrayList instructionTags;
+		ArrayList<String> questionTags;
+		ArrayList<String> instructionTags;
 
-		ArrayList choiceSingleTags;
-		ArrayList choiceSingleNonOpinionTags;
-		ArrayList choiceMultipleTags;
-		ArrayList openaddonTags;
+		ArrayList<String> choiceSingleTags;
+		ArrayList<String> choiceSingleNonOpinionTags;
+		ArrayList<String> choiceMultipleTags;
+		ArrayList<String> openaddonTags;
 
-		ArrayList choiceOpenTags;
+		ArrayList<String> choiceOpenTags;
 
-		ArrayList matrixHeadSingleTags;
-		ArrayList matrixSingleNonOpinionTags;
-		ArrayList matrixHeadMultipleTags;
-		ArrayList matrixOpenTags;
+		ArrayList<String> matrixHeadSingleTags;
+		ArrayList<String> matrixSingleNonOpinionTags;
+		ArrayList<String> matrixHeadMultipleTags;
+		ArrayList<String> matrixOpenTags;
 
-		ArrayList matrixItemTags;
+		ArrayList<String> matrixItemTags;
 
-		ArrayList likertLeftTags;
-		ArrayList likertMidTags;
-		ArrayList likertRightTags;
+		ArrayList<String> likertLeftTags;
+		ArrayList<String> likertMidTags;
+		ArrayList<String> likertRightTags;
 
 		//Liste zum Zwischenspeichern von Matrix-Antwortkategorie
-		ArrayList matrixHeadCategiories;
+		//ArrayList matrixHeadCategiories;
 
 
 		StringBuffer titleText = new StringBuffer("");
@@ -186,7 +187,7 @@ import org.xml.sax.Locator;
 
 		// Verbale Bezeichnungen für Fehlermeldungen
 		//Später Privat, ist hier für writer2qml freigegeben
-		public HashMap styleMap = new HashMap();
+		public HashMap<Integer, String> styleMap = new HashMap<Integer, String>();
 
 		//Aus Kompatibilitätserwägungen werden Absatzformatnamen
 		//aus älteren Versionen akzeptiert
@@ -194,8 +195,8 @@ import org.xml.sax.Locator;
 
 
 		//Formatlisten für Parsing
-		private ArrayList styleMustNotBeEmpty;
-		private ArrayList styleMustBeEmpty;
+		private ArrayList<Integer> styleMustNotBeEmpty;
+		private ArrayList<Integer> styleMustBeEmpty;
 
 
 	/*
@@ -545,7 +546,7 @@ import org.xml.sax.Locator;
 
 
 			//Listen für Fehlerüberprüfung
-			styleMustNotBeEmpty = new ArrayList();
+			styleMustNotBeEmpty = new ArrayList<Integer>();
 			styleMustNotBeEmpty.add( psCaption );
 			styleMustNotBeEmpty.add( psIntro );
 			styleMustNotBeEmpty.add( psIntroItem );
@@ -557,87 +558,87 @@ import org.xml.sax.Locator;
 			styleMustNotBeEmpty.add( psLikertLeft );
 			styleMustNotBeEmpty.add( psLikertRight );
 
-			styleMustBeEmpty = new ArrayList();
+			styleMustBeEmpty = new ArrayList<Integer>();
 			styleMustBeEmpty.add( psCaptionNewPage );
 			styleMustBeEmpty.add( psChoiceOpen );
 
 
 
 
-			matrixHeadCategiories = new ArrayList();
+			//matrixHeadCategiories = new ArrayList();
 
 
-			qstnTitleTags = new ArrayList();
+			qstnTitleTags = new ArrayList<String>();
 			qstnTitleTags.add("qml_3a_title");
 
 
-			introTags = new ArrayList();
+			introTags = new ArrayList<String>();
 			introTags.add( "qml_3a_intro" );
 
-			introItemTags = new ArrayList();
+			introItemTags = new ArrayList<String>();
 			introItemTags.add( "qml_3a_intro_5f_item" );
 
-			captionTags = new ArrayList();
+			captionTags = new ArrayList<String>();
 			captionTags.add("qml_3a_caption");
 
-			captionNewPageTags = new ArrayList();
+			captionNewPageTags = new ArrayList<String>();
 			captionNewPageTags.add("qml_3a_caption_5f_newpage");
 
 
-			questionTags = new ArrayList();
+			questionTags = new ArrayList<String>();
 			questionTags.add("qml_3a_question");
 
 
-			instructionTags = new ArrayList();
+			instructionTags = new ArrayList<String>();
 			instructionTags.add("qml_3a_instruction");
 
 
-			choiceSingleTags = new ArrayList();
+			choiceSingleTags = new ArrayList<String>();
 			choiceSingleTags.add("qml_3a_choice_5f_single");
 
 
-			choiceSingleNonOpinionTags = new ArrayList();
+			choiceSingleNonOpinionTags = new ArrayList<String>();
 	    	choiceSingleNonOpinionTags.add("qml_3a_choice_5f_single_5f_nonopinion");
 
 
-	    	choiceMultipleTags = new ArrayList();
+	    	choiceMultipleTags = new ArrayList<String>();
 	    	choiceMultipleTags.add( "qml_3a_choice_5f_multiple" );
 
 
-	    	openaddonTags = new ArrayList();
+	    	openaddonTags = new ArrayList<String>();
 	    	openaddonTags.add("qml_3a_choice_5f_openaddon");
 
-	    	choiceOpenTags = new ArrayList();
+	    	choiceOpenTags = new ArrayList<String>();
 	    	choiceOpenTags.add( "qml_3a_choice_5f_open");
 
-	    	matrixHeadSingleTags = new ArrayList();
+	    	matrixHeadSingleTags = new ArrayList<String>();
 			matrixHeadSingleTags.add("qml_3a_matrix_5f_head_5f_single");
 
 
-			matrixHeadMultipleTags = new ArrayList();
+			matrixHeadMultipleTags = new ArrayList<String>();
 			matrixHeadMultipleTags.add("qml_3a_matrix_5f_head_5f_multiple");
 
 
-			matrixOpenTags = new ArrayList();
+			matrixOpenTags = new ArrayList<String>();
 			matrixOpenTags.add("qml_3a_matrix_5f_open");
 
-			matrixSingleNonOpinionTags = new ArrayList();
+			matrixSingleNonOpinionTags = new ArrayList<String>();
 			matrixSingleNonOpinionTags.add("qml_3a_matrix_5f_single_5f_nonopinion");
 
 
-			matrixItemTags = new ArrayList();
+			matrixItemTags = new ArrayList<String>();
 			matrixItemTags.add("qml_3a_matrix_5f_item");
 
 
-			likertLeftTags = new ArrayList();
+			likertLeftTags = new ArrayList<String>();
 			likertLeftTags.add( "qml_3a_likert_5f_left" );
 
 
-			likertMidTags = new ArrayList();
+			likertMidTags = new ArrayList<String>();
 			likertMidTags.add( "qml_3a_likert_5f_mid" );
 
 
-			likertRightTags = new ArrayList();
+			likertRightTags = new ArrayList<String>();
 			likertRightTags.add( "qml_3a_likert_5f_right" );
 
 
@@ -681,73 +682,6 @@ import org.xml.sax.Locator;
 
 	  */
 
-	  public void foo(){;}
-
-	 /* Achtung, Alt
-	  // ---- main ----
-
-	  //Hier Methode deklarieren und Parameter filename und qstnmodel �bergeben
-	  public static void main( String[] argv )
-	  {
-
-		String inputFileName = argv[ 0 ];
-
-		System.out.println("lese: " + inputFileName );
-
-	   	if( argv.length != 1 )
-	    {
-	      System.err.println( "Usage: java OOoDataReader MyWriterFile.odt" );
-	      System.exit( 1 );
-	    }
-	    try {
-	      // Use an instance of ourselves as the SAX event handler
-	      //DefaultHandler handler = new XMLDataReader( argv[0] );
-
-	      //Dateiname wird q&d weitergereicht
-	      //Von main -> OOoDataReader.aFileName
-
-
-	      //Datei content.xml aus odt-Archiv in Stream lesen
-	      ZipFile zf = new ZipFile( inputFileName );
-	      ZipEntry entry = zf.getEntry("content.xml");
-	      InputStream is = zf.getInputStream( entry );
-
-
-	      DefaultHandler handler = new OOoDataReader( inputFileName );
-	      // Parse the input with the default (non-validating) parser
-	      SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
-	      //saxParser.parse( new File( argv[0] ), handler );
-	      saxParser.parse( is, handler );
-
-
-
-
-	      System.exit( 0 );
-	    } catch( Throwable t ) {
-	      t.printStackTrace();
-	      System.exit( 2 );
-	    }
-
-	  }
-
-	  */
-
-
-
-
-
-
-
-	  //Über Objekte Iterieren
-	  //Hä?
-	  public void iteriere( QstnComponent qstnComponent){
-
-			Iterator it = qstnComponent.iterator();
-			while( it.hasNext()){
-			}
-	  }
-
-
 
 
 
@@ -759,7 +693,7 @@ import org.xml.sax.Locator;
 		  //Evtl. nur einm al im Konstruktor erzeugen
 
 		  //Absatzformate, mit denen Datei beginnen darf
-		  ArrayList validStartTags = new ArrayList();
+		  ArrayList<Integer> validStartTags = new ArrayList<Integer>();
 	      validStartTags.add( psTitle );
 	      validStartTags.add( psIntro );
 	      validStartTags.add( psIntroItem );
@@ -770,19 +704,19 @@ import org.xml.sax.Locator;
 
 	      //Styles, die im ersten Itemteil auftreten
 	      //Werden auch in convertParagraphs() deklariert
-	      ArrayList itemStartTags = new ArrayList();
+	      ArrayList<Integer> itemStartTags = new ArrayList<Integer>();
 	      itemStartTags.add( psIntroItem  );
 	      itemStartTags.add( psQuestion );
 	      itemStartTags.add( psInstruction );
 
 	      //Absatztypen, die in einer Antwortskala mit Einfachnennung auftreten können
-	      ArrayList singleChoiceTags = new ArrayList();
+	      ArrayList<Integer> singleChoiceTags = new ArrayList<Integer>();
 	      singleChoiceTags.add( psChoiceSingle);
 	      singleChoiceTags.add( psChoiceOpenAddon );
 	      singleChoiceTags.add( psChoiceSingleNonOpinion );
 
 	      //Absatztypen, die in einer Matrix Antwortskala auftreten können
-	      ArrayList mxSingleTags = new ArrayList();
+	      ArrayList<Integer> mxSingleTags = new ArrayList<Integer>();
 	      mxSingleTags.add( psMatrixHeadSingle );
 	      mxSingleTags.add( psMatrixOpen );
 	      mxSingleTags.add( psMatrixSingleNonOpinion);
@@ -1480,14 +1414,14 @@ import org.xml.sax.Locator;
 
 
 		  //Absatztypen, die in Items vorkommen können
-		  ArrayList itemTags = new ArrayList();
+		  ArrayList<Integer> itemTags = new ArrayList<Integer>();
 		  itemTags.add( psIntroItem );
 		  itemTags.add( psQuestion );
 		  itemTags.add( psInstruction );
 
 
 		  //Absatztypen, die in Skalen vorkommen können
-		  ArrayList scaleTags = new ArrayList();
+		  ArrayList<Integer> scaleTags = new ArrayList<Integer>();
 		  scaleTags.add( psChoiceSingle);
 		  scaleTags.add( psChoiceMultiple );
 		  scaleTags.add( psChoiceOpenAddon );
@@ -1502,28 +1436,28 @@ import org.xml.sax.Locator;
 		  scaleTags.add( psLikertRight );
 
 		  //Absatztypen Einfachnennungen
-		  ArrayList singleTags = new ArrayList();
+		  ArrayList<Integer> singleTags = new ArrayList<Integer>();
 		  singleTags.add( psChoiceSingle );
 
 		  //Absatztypen Einfachnennung Nonopinion
-		  ArrayList singleNonOpinionTags = new ArrayList();
+		  ArrayList<Integer> singleNonOpinionTags = new ArrayList<Integer>();
 		  singleNonOpinionTags.add( psChoiceSingleNonOpinion );
 
 		  //Absatztypen, die nur in mehrfachnennungen vorkommen
-		  ArrayList multipleTags = new ArrayList();
+		  ArrayList<Integer> multipleTags = new ArrayList<Integer>();
 		  multipleTags.add( psChoiceMultiple );
 
 		  //Absatztypen, die nur in Matrix-Einfachnennung vorkommen
-		  ArrayList matrixSingleTags = new ArrayList();
+		  ArrayList<Integer> matrixSingleTags = new ArrayList<Integer>();
 		  matrixSingleTags.add( psMatrixHeadSingle );
 		  matrixSingleTags.add( psMatrixSingleNonOpinion );
 
 		  //Absatztypen, die nur in Matrix-Mehrfachnennung vorkommen
-		  ArrayList matrixMultipleTags = new ArrayList();
+		  ArrayList<Integer> matrixMultipleTags = new ArrayList<Integer>();
 		  matrixMultipleTags.add( psMatrixHeadMultiple );
 
 		  //Absatztypen, die nur in LIkert-Skalen vorkommen
-		  ArrayList likertTags = new ArrayList();
+		  ArrayList<Integer> likertTags = new ArrayList<Integer>();
 		  likertTags.add( psLikertLeft );
 		  likertTags.add( psLikertMid );
 		  likertTags.add( psLikertRight );
@@ -1542,8 +1476,8 @@ import org.xml.sax.Locator;
 
 
 		  //Iterieren über alle Absätze
-		  String scale;
-		  String scaleType;
+		  //String scale;
+		  //String scaleType;
 		  int parStyle, formerParStyle, nextParStyle;
 		  int scalePointCount = 0;
 		  //Prüfvariable, ob multiple-Eigenschaft gesetzt wurde
@@ -1551,14 +1485,13 @@ import org.xml.sax.Locator;
 		  String parContent;
 		  for (int i = 0; i < writerContentBuffer.size(); i++){
 
-			  scaleType = "";
+
+			  //scaleType = "";
 			  parStyle = ((WriterParagraph) writerContentBuffer.get( i )).parStyle;
 			  parContent = ((WriterParagraph) writerContentBuffer.get( i )).parContent;
 
-        	  if( scaleTags.contains( parStyle )) scale = "Skala";
-        	  else scale = "keine Skala";
-
-
+        	  //if( scaleTags.contains( parStyle )) scale = "Skala";
+        	  //else scale = "keine Skala";
 
 
         	  //Neue Seite?
@@ -1897,26 +1830,8 @@ import org.xml.sax.Locator;
         	  } //Letzter Absatz einer Antwortskala
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        	  WriterParagraph par = writerContentBuffer.get( i );
+        	  //WriterParagraph par = writerContentBuffer.get( i );
         	  //System.out.println( "["+ i +"] " + (String) styleMap.get(par.parStyle) + "["+ scale +"] " + scaleType  );
-
-
-
 
 
           } // Alle Absätze

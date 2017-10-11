@@ -38,7 +38,7 @@ public class SaxWriterHeadParReader extends DefaultHandler {
 
 	//Liste zum Speichern der Formatvorlagennamen,
 	//die intern für qml:title verwendet werden
-	ArrayList qstnTitleTags;
+	ArrayList<String> qstnTitleTags;
 
 	//StringBuffer zum Speichern der Zeichen
 	StringBuffer titleText = new StringBuffer("");
@@ -51,11 +51,11 @@ public class SaxWriterHeadParReader extends DefaultHandler {
 
 
 	//Konstruktor
-	public SaxWriterHeadParReader( ArrayList writerContentBuffer ){
+	public SaxWriterHeadParReader( ArrayList<WriterParagraph> writerContentBuffer ){
 
 		this.writerContentBuffer = writerContentBuffer;
 
-		qstnTitleTags = new ArrayList();
+		qstnTitleTags = new ArrayList<String>();
 		qstnTitleTags.add("qml_3a_title");
 
 	}

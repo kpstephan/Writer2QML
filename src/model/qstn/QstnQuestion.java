@@ -62,7 +62,7 @@ import java.util.Iterator;
 
 		//Iterator der Klasse QstnComponent, gibt Nulliterator zurück
 		// da Questions keine QstnComonents aufnehmen können
-		public Iterator iterator(){
+		public Iterator<QstnComponent> iterator(){
 			return new NullIterator();
 		}
 

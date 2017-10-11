@@ -1,46 +1,35 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<qml:questionnaire xmlns:qml="www.qml.uni-siegen.de" version="1.2" title="Titel des Fragebogens" id="qstnId">
+<qml:questionnaire xmlns:qml="www.qml.uni-siegen.de" version="1.2" title="Titel des tollen Fragebogens" id="qstnId">
 
 
- <qml:section id="S1" type="page">
+ <qml:section id="S1" type="group" title="Überschrift">
 
+     <qml:item id="V1">
+         <qml:question>Welches Geschlecht haben Sie?</qml:question>
+         <qml:responses type="single" orientation="vertical">
+             <qml:choice id="V1C1" type="closed" value="1">weiblich</qml:choice>
+             <qml:choice id="V1C2" type="closed" value="2">männlich</qml:choice>
+         </qml:responses>
+     </qml:item>
 
-     <qml:section id="S2" type="group" title="Abschnittsüberschrift">
+     <qml:item id="V2">
+         <qml:question>Welche Zeitung lesen Sie?</qml:question>
+         <qml:responses type="multiple" orientation="vertical">
+             <qml:choice id="V2C1" type="closed">HAZ</qml:choice>
+             <qml:choice id="V2C2" type="closed">TAZ</qml:choice>
+             <qml:choice id="V2C3" type="closed">FAZ</qml:choice>
+             <qml:choice id="V2C4" type="closed">Bild</qml:choice>
+         </qml:responses>
+     </qml:item>
 
-         <qml:item id="V1">
-             <qml:question>Welches Geschlecht haben Sie?</qml:question>
-             <qml:responses type="single" orientation="vertical">
-                 <qml:choice id="V1C1" type="closed" value="1">weiblich</qml:choice>
-                 <qml:choice id="V1C2" type="closed" value="2">männlich</qml:choice>
-             </qml:responses>
-         </qml:item>
-
-         <qml:item id="V2">
-             <qml:question>Was hat Sie bewogen, nach dem Studienabschluss ein Praktikum aufzunehmen?</qml:question>
-             <qml:instruction>Mehrfachnennung möglich</qml:instruction>
-             <qml:responses type="multiple" orientation="vertical">
-                 <qml:choice id="V2C1" type="closed">Ich hatte mich vergeblich um eine Arbeitsstelle bemüht</qml:choice>
-                 <qml:choice id="V2C2" type="closed">Ich glaube über ein Praktikum schneller in eine Beschäftigung zu gelangen</qml:choice>
-                 <qml:choice id="V2C3" type="closed">ich wollte mich praktisch qualifizieren</qml:choice>
-                 <qml:choice id="V2C4" type="closed">Sonstiges</qml:choice>
-             </qml:responses>
-         </qml:item>
-
-         <qml:item id="V3">
-             <qml:question>Haben Sie weitere Anmerkungen?</qml:question>
-             <qml:instruction>Sie haben 500 Zeichen zur Verfügung</qml:instruction>
-             <qml:responses type="single" orientation="vertical">
-                 <qml:choice id="V3C1" type="open" length="250"></qml:choice>
-             </qml:responses>
-         </qml:item>
-
-     </qml:section>
-
- </qml:section>
-
-
- <qml:section id="S3" type="page">
+     <qml:item id="V3">
+         <qml:question>Wie finden Sie diesen Fragebogen?</qml:question>
+         <qml:instruction>Bitten schreiben Sie nicht so viel!</qml:instruction>
+         <qml:responses type="single" orientation="vertical">
+             <qml:choice id="V3C1" type="open" length="250"></qml:choice>
+         </qml:responses>
+     </qml:item>
 
      <qml:matrix id="M4">
          <qml:matrixQuestion>Einführungstext zur Frage.</qml:matrixQuestion>

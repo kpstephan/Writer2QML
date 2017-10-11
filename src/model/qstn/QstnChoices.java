@@ -48,8 +48,8 @@ public class QstnChoices extends QstnComponent{
 
 		//Choices und Matrixitems werden zunächst nicht als
 		//QstnItem implementiert
-		private ArrayList choices = new ArrayList();
-		private ArrayList matrixItems = new ArrayList();
+		private ArrayList<Category> choices = new ArrayList<Category>();
+		private ArrayList<String> matrixItems = new ArrayList<String>();
 
 
 
@@ -92,7 +92,7 @@ public class QstnChoices extends QstnComponent{
 		}
 
 		//Iterator über Kategorien
-		public Iterator getChoiceIterator(){
+		public Iterator<Category> getChoiceIterator(){
 			return choices.iterator();
 		}
 
@@ -108,12 +108,12 @@ public class QstnChoices extends QstnComponent{
 
 
 		//Matrixitem hinzufügen
-		public void addMatrixItem( Object o){
-			matrixItems.add( o );
+		public void addMatrixItem( String s){
+			matrixItems.add( s );
 		}
 
 		//Iterator über MatrixItems
-		public Iterator getMatrixItemIterator(){
+		public Iterator<String> getMatrixItemIterator(){
 			return matrixItems.iterator();
 		}
 
@@ -154,7 +154,7 @@ public class QstnChoices extends QstnComponent{
 
 		//Iterator der Klasse QstnComponent, gibt Nulliterator zurück
 		// da Matrixfragen keine QstnComonents aufnehmen können
-		public Iterator iterator(){
+		public Iterator<QstnComponent> iterator(){
 			return new NullIterator();
 		}
 

@@ -45,7 +45,7 @@ public class QstnCaption extends QstnComponent{
 
 	//Iterator der Klasse QstnComponent, gibt Nulliterator zurück
 	// da Captions keine QstnComonents aufnehmen können
-	public Iterator iterator(){
+	public Iterator<QstnComponent> iterator(){
 		return new NullIterator();
 	}
 

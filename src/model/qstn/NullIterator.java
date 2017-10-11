@@ -26,13 +26,13 @@ package model.qstn;
  */
 import java.util.Iterator;
 
-public class NullIterator implements Iterator {
+public class NullIterator implements Iterator<QstnComponent> {
 
 	public boolean hasNext() {
 		return false;
 	}
 
-	public Object next() {
+	public QstnComponent next() {
 		return null;
 	}
 

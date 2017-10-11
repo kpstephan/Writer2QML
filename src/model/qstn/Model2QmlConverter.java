@@ -20,11 +20,7 @@
 */
 
 package model.qstn;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Iterator;
@@ -39,6 +35,7 @@ import java.util.Iterator;
 
 public class Model2QmlConverter {
 
+	@SuppressWarnings("unused")
 	private File exportFile;
 	private QstnComponent qstnComponent;
 	private PrintWriter f;
@@ -81,7 +78,7 @@ public class Model2QmlConverter {
 	private void printItemIntro( QstnComponent itemComponent ){
 
 		QstnIntro intro = (QstnIntro) itemComponent;
-    	Iterator textParIt = intro.getTextParIterator();
+    	Iterator<String> textParIt = intro.getTextParIterator();
 
     	//Text der Instruction hat 0 oder 1 Absatz
     	if ( intro.getParCount() < 2 ){
@@ -113,7 +110,7 @@ public class Model2QmlConverter {
     private void printItemInstruction( QstnComponent itemComponent ){
 
     	QstnInstruction instruction = (QstnInstruction) itemComponent;
-    	Iterator textParIt = instruction.getTextParIterator();
+    	Iterator<String> textParIt = instruction.getTextParIterator();
 
     	//Hat Text der Instruction mehrere Absätze?
     	if ( instruction.getParCount() < 2 ){
@@ -166,7 +163,7 @@ public class Model2QmlConverter {
 
 
 		//Skalenausrichtung
-		if( choices.getOrientation() == choices.ORIENTATION_VERTICAL ){
+		if( choices.getOrientation() == QstnChoices.ORIENTATION_VERTICAL ){
 		    f.print(" orientation=\"vertical\"");
 		} else{
 			f.print(" orientation=\"horizontal\"");
@@ -177,13 +174,13 @@ public class Model2QmlConverter {
 
 
 		//Ausgabe der Choice-Elemente
-		String idAtt, typeAtt="", lengthAtt,  valueAtt;
+		String typeAtt="", lengthAtt,  valueAtt;
 		String choiceId;
 		int length;
 		int choiceCounter;
 
 		choiceCounter = 0;
-		Iterator choiceIt = choices.getChoiceIterator();
+		Iterator<Category> choiceIt = choices.getChoiceIterator();
 		while( choiceIt.hasNext() ){
 
 			choiceCounter++;
@@ -423,7 +420,7 @@ public class Model2QmlConverter {
 		String itemId;
 
 		QstnChoices choices = (QstnChoices) itemComponent;
-		Iterator matrixItemIt = choices.getMatrixItemIterator();
+		Iterator<String> matrixItemIt = choices.getMatrixItemIterator();
 
 
 		int matrixItemCounter = 0;
@@ -455,7 +452,7 @@ public class Model2QmlConverter {
 
 
     //Komponete im QML-Format ausgeben
-    private void printQstnComponent( Iterator it ){
+    private void printQstnComponent( Iterator<QstnComponent> it ){
 
 
  	    while ( it.hasNext()){
@@ -475,7 +472,7 @@ public class Model2QmlConverter {
 		  if( component instanceof QstnIntro ){
 
 			  QstnIntro intro = ( QstnIntro ) component;
-		      Iterator textParIt = intro.getTextParIterator();
+		      Iterator<String> textParIt = intro.getTextParIterator();
 		      //Text dürfte nur eine Zeile enthalten
 		      String parContent = "";
 	    	  if( intro.getParCount() > 0) parContent = (String) textParIt.next();
@@ -505,7 +502,7 @@ public class Model2QmlConverter {
 				    indentLevel++;
 
 				    //Item Kinder
-				    Iterator itemIt = item.iterator();
+				    Iterator<QstnComponent> itemIt = item.iterator();
 				    while ( itemIt.hasNext()){
 
 
@@ -560,7 +557,7 @@ public class Model2QmlConverter {
 
 				    //Item Kinder
 				    indentLevel++;
-				    Iterator itemIt = item.iterator();
+				    Iterator<QstnComponent> itemIt = item.iterator();
 				    while ( itemIt.hasNext()){
 
 

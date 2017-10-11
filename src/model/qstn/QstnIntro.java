@@ -81,7 +81,7 @@ import java.util.Iterator;
 
 
 		//besser ParText Objekt übergeben und dessen Methoden aufrufen?
-	    public Iterator getTextParIterator(){
+	    public Iterator<String> getTextParIterator(){
 	    	return parText.getParIterator();
 	    }
 
@@ -101,7 +101,7 @@ import java.util.Iterator;
 		//Ausgabe des Intros
 		public void printComponent(){
 			System.out.println( "Intro: ");
-			Iterator it = parText.getParIterator();
+			Iterator<String> it = parText.getParIterator();
 			while( it.hasNext() ){
 				System.out.println( (String) it.next() );
 			}
@@ -110,7 +110,7 @@ import java.util.Iterator;
 
 		//Iterator der Klasse QstnComponent, gibt Nulliterator zurück
 		// da Instros keine QstnComonents aufnehmen können
-		public Iterator iterator(){
+		public Iterator<QstnComponent> iterator(){
 			return new NullIterator();
 		}
 

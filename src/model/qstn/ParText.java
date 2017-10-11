@@ -35,7 +35,7 @@ import java.util.Iterator;
 public class ParText {
 
 
-			private ArrayList paragraphs = new ArrayList();
+			private ArrayList<String> paragraphs = new ArrayList<String>();
 
 			private String name = "";
 
@@ -62,7 +62,7 @@ public class ParText {
 			}
 
 			//Iterator über Absätze
-			public Iterator getParIterator(){
+			public Iterator<String> getParIterator(){
 				return paragraphs.iterator();
 			}
 

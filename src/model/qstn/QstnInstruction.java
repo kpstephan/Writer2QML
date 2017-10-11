@@ -61,7 +61,7 @@ public class QstnInstruction extends QstnComponent{
 
 
 	//besser ParText Objekt übergeben und dessen Methoden aufrufen?
-    public Iterator getTextParIterator(){
+    public Iterator<String> getTextParIterator(){
     	return parText.getParIterator();
     }
 
@@ -91,7 +91,7 @@ public class QstnInstruction extends QstnComponent{
 	//Ausgabe der Instruction
 	public void printComponent(){
 		System.out.println( "Instruction: ");
-		Iterator it = parText.getParIterator();
+		Iterator<String> it = parText.getParIterator();
 		while( it.hasNext() ){
 			System.out.println( (String) it.next() );
 		}
@@ -99,7 +99,7 @@ public class QstnInstruction extends QstnComponent{
 
 	//Iterator der Klasse QstnComponent, gibt Nulliterator zurück
 	// da Instructions keine QstnComonents aufnehmen können
-	public Iterator iterator(){
+	public Iterator<QstnComponent> iterator(){
 		return new NullIterator();
 	}
 

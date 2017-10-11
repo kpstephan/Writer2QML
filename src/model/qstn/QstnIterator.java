@@ -21,7 +21,7 @@
 
 package model.qstn;
 /*
- * KonpositumIterator für QstnKomonents
+ * KonpositumIterator für QstnComonents
  *
  *  TDO //Klassenhierarchie ändern ,
  *   neue QstnComponent erweitern zu klasse , die Kinder hat
@@ -33,11 +33,11 @@ package model.qstn;
 
 import java.util.*;
 
-public class QstnIterator implements Iterator {
+public class QstnIterator implements Iterator<QstnComponent> {
 
-	Stack stack = new Stack();
+	Stack<Iterator<QstnComponent>> stack = new Stack<Iterator<QstnComponent>>();
 
-	public QstnIterator(Iterator iterator){
+	public QstnIterator(Iterator<QstnComponent> iterator){
 		stack.push( iterator );
 	}
 
@@ -46,7 +46,7 @@ public class QstnIterator implements Iterator {
 		    return false;
 	    }
 	    else{
-		    Iterator iterator = (Iterator) stack.peek();
+		    Iterator<QstnComponent> iterator = (Iterator<QstnComponent>) stack.peek();
 		    if( ! iterator.hasNext() ){
 		        stack.pop();
 			    return hasNext();
@@ -59,9 +59,9 @@ public class QstnIterator implements Iterator {
     }
 
 
-	public Object next() {
+	public QstnComponent next() {
       if( hasNext()){
-    	  Iterator iterator = (Iterator) stack.peek();
+    	  Iterator<QstnComponent> iterator = (Iterator<QstnComponent>) stack.peek();
     	  QstnComponent qstnComponent = (QstnComponent) iterator.next();
     	  //Hier übergeordnete Klasse, aus der section und qstn abgeleitet sind
     	  if( qstnComponent instanceof QstnSection){

@@ -119,9 +119,9 @@ public class ApplicationSettings {
 			f.println("#configuration settings");
 
 			//Schlüssel Wert Paare schreiben
-			Iterator it = map.entrySet().iterator();
+			Iterator<Entry<String, String>> it = map.entrySet().iterator();
 			while( it.hasNext() ){
-				Entry entry = (Entry) it.next();
+				Entry<String, String> entry = (Entry<String, String>) it.next();
 				f.println( (String) entry.getKey() + "=" + (String) entry.getValue());
 
 			}
