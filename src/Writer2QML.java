@@ -93,7 +93,7 @@ import model.qstn.Model2QmlConverter;
 
 
 
-public class writer2qml {
+public class Writer2QML {
 
   //Name der Applikation
   static final String APPNAME = "Writer2QML 1.2";
@@ -223,7 +223,7 @@ public class writer2qml {
   String urlResultFile;
 
   //Konstruktor
-  public writer2qml(){
+  public Writer2QML(){
 
 	ls = System.getProperty( "line.separator" );
 	fs = System.getProperty( "file.separator" );
@@ -1575,7 +1575,7 @@ public class writer2qml {
 
 //SaxHandler zum parsen des comntents wird hier schon erzeugt,
 //Um dort verwaltete Liste Q&D übergeben zu können (siehe oben Kommentar)
-	   w2qOoDataReader handler =  new w2qOoDataReader( fileName );
+	   W2qOoDataReader handler =  new W2qOoDataReader( fileName );
 
 	   //styles.xml parsen
 //Achtung Q&D siehe oben Kommentar
@@ -1978,7 +1978,7 @@ public class writer2qml {
 
 
   public static void main (String [] args) {
-    new writer2qml();
+    new Writer2QML();
   }
 
 

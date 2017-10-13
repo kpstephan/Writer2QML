@@ -60,7 +60,7 @@ import model.qstn.QstnIntro;
 import model.qstn.QstnQuestion;
 import model.qstn.QstnSection;
 
-	public class w2qOoDataReader extends DefaultHandler{
+	public class W2qOoDataReader extends DefaultHandler{
 
 
 		/* Dokumentation:
@@ -426,7 +426,7 @@ import model.qstn.QstnSection;
 
 
 		//Konstruktor
-		public w2qOoDataReader( String fileName){
+		public W2qOoDataReader( String fileName){
 
 			//q&d zum Übergeben des Dateinamens
 			//Wer liest das??
