@@ -19,17 +19,21 @@
 
 */
 
+package main;
+
 import java.util.ArrayList;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+
 /*
  * Handler für Sax-Parser
  * Liest Absatz mit Formatvorlage "qml:title" aus XML Datei
  *
  */
+
 
 public class SaxWriterHeadParReader extends DefaultHandler {
 

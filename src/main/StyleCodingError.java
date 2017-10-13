@@ -19,6 +19,8 @@
 
 */
 
+package main;
+
 //Fehler während des Parsings, mehreren Klassen zur verfügung stehen daher
 //Eigene Klassendatei
 public class StyleCodingError {

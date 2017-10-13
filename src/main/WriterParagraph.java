@@ -19,6 +19,7 @@
 
 */
 
+package main;
 
 public class WriterParagraph {
 
