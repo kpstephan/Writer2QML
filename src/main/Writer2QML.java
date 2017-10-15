@@ -91,7 +91,6 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
-import model.converter.Paragraphs2ZofarQmlConverter;
 import model.converter.Parapgraphs2SimpleQstnConverter;
 import model.simplequestionnaire.Model2QmlConverter;
 import model.simplequestionnaire.Qstn;
@@ -1426,91 +1425,6 @@ public class Writer2QML {
 
 
 
- /*
-  private void testRegex(){
-
-	  System.out.println("************** Regex-Test ****************");
-	  System.out.println();
-
-	  String line = "<qml:additionaltext>Dies ist ein Additionaltext</qml:aditionaltext>" +
-	  		        "<qml:choices multiple=\"true\"></qml:choices>";
-
-
-
-	  String elemenNamePatternStr = "<(/)?qml:(\\w)+";
-
-	  String elementGtPatternStr = ">";
-
-	  String attribNamePatternStr = "(\\w)+=";
-
-	  String attribContentPatternStr = "\"(\\w)*\"";
-
-
-
-	  System.out.println( line );
-
-	  System.out.println("Elemente:");
-	  Pattern elementNamePattern = Pattern.compile( elemenNamePatternStr );
-
-	  Matcher elementNameMatcher = elementNamePattern.matcher( line );
-
-	  while( elementNameMatcher.find() ){
-		  int start = elementNameMatcher.start();
-		  int end = elementNameMatcher.end();
-		  String str = line.substring(start, end);
-		  System.out.println( "Gefunden: " + start + " bis " + end + " " + str );
-	  }
-
-
-
-	  System.out.println("Attribute:");
-	  Pattern attributeNamePattern = Pattern.compile( attribNamePatternStr );
-
-	  Matcher attributeNameMatcher = attributeNamePattern.matcher( line );
-
-	  while( attributeNameMatcher.find() ){
-		  int start = attributeNameMatcher.start();
-		  int end = attributeNameMatcher.end();
-		  String str = line.substring(start, end);
-		  System.out.println( "Gefunden: " + start + " bis " + end + " " + str );
-	  }
-
-
-	  System.out.println("Attributinhalte:");
-	  Pattern attributeContentPattern = Pattern.compile( attribContentPatternStr );
-
-	  Matcher attributeContentMatcher = attributeContentPattern.matcher( line );
-
-	  while( attributeContentMatcher.find() ){
-		  int start = attributeContentMatcher.start();
-		  int end = attributeContentMatcher.end();
-		  String str = line.substring(start, end);
-		  System.out.println( "Gefunden: " + start + " bis " + end + " " + str );
-	  }
-
-
-	  System.out.println("Element Ende \">\":");
-	  Pattern elementGtPattern = Pattern.compile( elementGtPatternStr );
-
-	  Matcher elementGtMatcher = elementGtPattern.matcher( line );
-
-	  while( elementGtMatcher.find() ){
-		  int start = elementGtMatcher.start();
-		  int end = elementGtMatcher.end();
-		  String str = line.substring(start, end);
-		  System.out.println( "Gefunden: " + start + " bis " + end + " " + str );
-	  }
-
-
-
-	  System.out.println();
-	  System.out.println();
-	  System.out.println();
-
-
-
-  }//test RegEx
- */
 
 //Datei Konvertieren
 //Logik dieser Funktion ändern, Teile als Funktionen ausgliedern, wie etwa message füllen -> ShowMessage()
