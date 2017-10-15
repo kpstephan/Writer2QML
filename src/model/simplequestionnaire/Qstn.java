@@ -19,7 +19,7 @@
 
 */
 
-package model.qstn;
+package model.simplequestionnaire;
 //Qstn und Section aus neuer klasse ableiten, die QstnCompnet erweitert
 //und Kinder haben kann;
 

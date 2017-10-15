@@ -19,7 +19,7 @@
 
 */
 
-package model.qstn;
+package model.simplequestionnaire;
 
 //Soll Category auch als qstnComponent behandelt werden?
 //Oder Soll ein Choices-Objekt als QstnComponent behandelt werden?

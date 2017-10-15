@@ -19,7 +19,7 @@
 
 */
 
-package model.qstn;
+package model.simplequestionnaire;
 /*
  * QstnIntro
  *

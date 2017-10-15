@@ -19,7 +19,7 @@
 
 */
 
-package model.qstn;
+package model.simplequestionnaire;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;

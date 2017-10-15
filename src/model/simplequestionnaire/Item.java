@@ -19,7 +19,7 @@
 
 */
 
-package model.qstn;
+package model.simplequestionnaire;
 /*
  * Dies hier ist neues Item Objekt
  * Später zu QstnItem umbenennen

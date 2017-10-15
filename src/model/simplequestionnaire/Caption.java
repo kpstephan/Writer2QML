@@ -19,7 +19,7 @@
 
 */
 
-package model.qstn;
+package model.simplequestionnaire;
 
 	public class Caption {
 		//Variablen und Objekte sollten gekapselt werden
