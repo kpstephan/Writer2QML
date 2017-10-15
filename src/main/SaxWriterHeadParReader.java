@@ -27,6 +27,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import model.writerparagraphs.TextParagraph;
+import model.writerparagraphs.TextParagraphList;
+
 
 /*
  * Handler für Sax-Parser
@@ -36,6 +39,9 @@ import org.xml.sax.helpers.DefaultHandler;
 
 
 public class SaxWriterHeadParReader extends DefaultHandler {
+
+
+	private TextParagraphList textParagraphList;
 
 	//Referenz auf Liste zur Speicherung der gelesenen Absätze
 	public  ArrayList<WriterParagraph> writerContentBuffer;
@@ -55,8 +61,9 @@ public class SaxWriterHeadParReader extends DefaultHandler {
 
 
 	//Konstruktor
-	public SaxWriterHeadParReader( ArrayList<WriterParagraph> writerContentBuffer ){
+	public SaxWriterHeadParReader( TextParagraphList textParagraphList, ArrayList<WriterParagraph> writerContentBuffer ){
 
+		this.textParagraphList = textParagraphList;
 		this.writerContentBuffer = writerContentBuffer;
 
 		qstnTitleTags = new ArrayList<String>();
@@ -169,6 +176,7 @@ public class SaxWriterHeadParReader extends DefaultHandler {
         if ( qName.equals("text:p")){
 
 	        if( parsingState == psTitle ){
+	         textParagraphList.addParagraph(new TextParagraph(parsingState, titleText.toString()));
  			    writerContentBuffer.add( new WriterParagraph( parsingState, titleText.toString()));
 	  	        titleText.delete(0, titleText.length());
                 parsingState = psNone;
