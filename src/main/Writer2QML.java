@@ -91,7 +91,12 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
-import model.qstn.Model2QmlConverter;
+import model.converter.Paragraphs2ZofarQmlConverter;
+import model.converter.Parapgraphs2SimpleQstnConverter;
+import model.simplequestionnaire.Model2QmlConverter;
+import model.simplequestionnaire.Qstn;
+import model.writerparagraphs.TextParagraphList;
+
 
 
 
@@ -101,11 +106,18 @@ public class Writer2QML {
   static final String APPNAME = "Writer2QML 1.2";
 
 
-  //Lineseparator, Fileseparator und Homedirectory
-  String ls, fs, appDir, homeDir;
+  //List of paragraph properties read from Libreoffice Writer file
+  TextParagraphList textParagraphList = new TextParagraphList();
+
+  //questionnaire
+  Qstn qstn;
 
   //Beinhaltet das QML Konvertierungsergebnis
   private String qmlFileContentString;
+
+
+  //Lineseparator, Fileseparator und Homedirectory
+  String ls, fs, appDir, homeDir;
 
 
   //Fenster
@@ -1566,6 +1578,20 @@ public class Writer2QML {
 	  */
 
 
+		/* The logic should be structured like this:
+		 *
+		 * - read paragraphs
+		 * - check paragraphs
+		 * - convert paragraphs to qstn
+		 * - convert qstn to simple_qml
+		 * - convert simple_qml to simle_html_questionnaire
+		 *
+		 * - NEW 1: convert paragraphs to QML
+		 * - NEW 2: convert QML to clickable Zofar questionnaire
+		 *
+		 */
+
+
 
 	   ZipFile zf = new ZipFile( fileName );
 	   //Titel aus style.xml lesen
@@ -1577,14 +1603,13 @@ public class Writer2QML {
 
 //SaxHandler zum parsen des comntents wird hier schon erzeugt,
 //Um dort verwaltete Liste Q&D übergeben zu können (siehe oben Kommentar)
-	   W2qOoDataReader handler =  new W2qOoDataReader( fileName );
+	   W2qOoDataReader handler =  new W2qOoDataReader( textParagraphList, fileName );
 
 	   //styles.xml parsen
 //Achtung Q&D siehe oben Kommentar
-	   SaxWriterHeadParReader styleParsingHandler = new SaxWriterHeadParReader( handler.writerContentBuffer );
+	   SaxWriterHeadParReader styleParsingHandler = new SaxWriterHeadParReader( textParagraphList, handler.writerContentBuffer );
 	   SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
 	   saxParser.parse( styleIs, styleParsingHandler );
-
 
 	   //Inhalt aus content.xml
 	   ZipEntry entry = zf.getEntry("content.xml");
@@ -1598,7 +1623,26 @@ public class Writer2QML {
 
 
 
-	   /********* Menu aktuelisieren **********/
+
+
+	   /** convert paragraph list to zofar qml (the convert method is not implemented yet  ) **/
+	   if (handler.codingErrors.isEmpty()){
+		  //Paragraphs2ZofarQmlConverter.convertToZofarQml(textParagraphList);
+	   }
+
+
+
+
+	   /*********  convert paragraph list to simple questionnaire **********/
+	   //q&d, move codingError property and method W2qOodataReader.checkParStyles() to TextParagraphList
+	   if (handler.codingErrors.isEmpty()){
+		   qstn = Parapgraphs2SimpleQstnConverter.convertToSimpleQuestionnaire(textParagraphList);
+	   }
+
+
+
+
+	   /********* Menu aktualisieren **********/
 
        miExportMessages.setEnabled( true );
 
@@ -1610,7 +1654,8 @@ public class Writer2QML {
 
 		   //Modell nach QML KOnvertieren
 		   //fileName hat keine Bedeutung
-		   Model2QmlConverter converter = new Model2QmlConverter( handler.getQstn(), new File( xmlFileName ));
+		   //Model2QmlConverter converter = new Model2QmlConverter( handler.getQstn(), new File( xmlFileName ));
+		   Model2QmlConverter converter = new Model2QmlConverter( qstn, new File( xmlFileName ));
 		   StringBuffer qml = converter.convert();
 
 		   //Ergebnis in anzeigen

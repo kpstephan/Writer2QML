@@ -52,14 +52,9 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import model.qstn.Category;
-import model.qstn.Item;
-import model.qstn.Qstn;
-import model.qstn.QstnChoices;
-import model.qstn.QstnInstruction;
-import model.qstn.QstnIntro;
-import model.qstn.QstnQuestion;
-import model.qstn.QstnSection;
+import model.simplequestionnaire.Qstn;
+import model.writerparagraphs.TextParagraph;
+import model.writerparagraphs.TextParagraphList;
 
 	public class W2qOoDataReader extends DefaultHandler{
 
@@ -80,6 +75,8 @@ import model.qstn.QstnSection;
 		 * eigenes Qstn Objekt (könnte auch übetrgeben werden)
 		 *
 		 */
+
+		private TextParagraphList textParagraphList;
 
         private boolean debugMode = false;
 
@@ -427,7 +424,9 @@ import model.qstn.QstnSection;
 
 
 		//Konstruktor
-		public W2qOoDataReader( String fileName){
+		public W2qOoDataReader( TextParagraphList textParagraphList, String fileName){
+
+			this.textParagraphList = textParagraphList;
 
 			//q&d zum Übergeben des Dateinamens
 			//Wer liest das??
@@ -651,6 +650,7 @@ import model.qstn.QstnSection;
 		public Qstn getQstn(){
 			return qstn;
 		}
+
 
 
 	  public void setDocumentLocator (Locator locator){
@@ -1351,521 +1351,6 @@ import model.qstn.QstnSection;
 
 
 
-	  //QstnModel aus Liste der Writer Absätze generieren.
-	  private void convertParagraphs(){
-
-		  /*
-		   * Logik erklären. Page, Section, Item, Scale
-		   *
-		   */
-
-
-		  //Neues Fragebogenobjekt
-		  qstn = new Qstn();
-		  //Zum testen Namen setzten wird in printcomponent() ausgegeben
-		  qstn.setName( "Fragebogen" );
-
-
-		  //Setzen des Fragebogentitels
-		  //Ein Fragebogentitel ist immer das Erste Element
-		  if ( ! writerContentBuffer.isEmpty() ){
-
-			  int parStyle = ((WriterParagraph) writerContentBuffer.get( 0 )).parStyle;
-
-			  if (parStyle == psTitle){
-
-				  String parContent = ((WriterParagraph) writerContentBuffer.get( 0 )).parContent;
-				  qstn.setQstnTitle( parContent );
-
-			  }
-		  }
-
-
-
-		  //Variable für aktuelle Seite und aktuelle Section
-		  QstnSection currentPage = qstn;
-
-          /*
-           * Logik mit currentPage und currentSection
-           * Wenn keine Seitenumbrüche existieren
-           *
-           *
-           */
-
-		  QstnSection currentSection = qstn;
-
-		  int pageCounter = 0;
-
-		  //Wann wird ein neues Item erzeugt?
-		  //Neues Item erzeugen
-		  //Werden erzeugt um fehler may not have been initializes abzufangen
-		  Item currentItem = new Item();
-		  QstnChoices currentChoices = new QstnChoices();
-
-		  //Referenz auf das aktuelle Instruktion Objekt
-		  //Wird benötigt, da mehrere Writer-Instruktions hintereinander
-		  //in mehrere Textabsätze einer QstnInstruction konvertiert werden.
-		  QstnInstruction currentInstruction = new QstnInstruction();
-		  //Objekt wird hier schon erzeugt um kompilerfehler zu umgehen
-		  //(Objekt wird unten nur erzeugt, wenn bestimmte Bedingung zutrifft)
-
-		  //Das gleiche gilt für Itemintro
-		  QstnIntro currenItemIntro = new QstnIntro();
-
-
-
-		  //Absatztypen, die in Items vorkommen können
-		  ArrayList<Integer> itemTags = new ArrayList<Integer>();
-		  itemTags.add( psIntroItem );
-		  itemTags.add( psQuestion );
-		  itemTags.add( psInstruction );
-
-
-		  //Absatztypen, die in Skalen vorkommen können
-		  ArrayList<Integer> scaleTags = new ArrayList<Integer>();
-		  scaleTags.add( psChoiceSingle);
-		  scaleTags.add( psChoiceMultiple );
-		  scaleTags.add( psChoiceOpenAddon );
-		  scaleTags.add( psChoiceOpen );
-		  scaleTags.add( psChoiceSingleNonOpinion );
-		  scaleTags.add( psMatrixHeadSingle );
-		  scaleTags.add( psMatrixHeadMultiple );
-		  scaleTags.add( psMatrixOpen );
-		  scaleTags.add( psMatrixSingleNonOpinion);
-		  scaleTags.add( psLikertLeft );
-		  scaleTags.add( psLikertMid );
-		  scaleTags.add( psLikertRight );
-
-		  //Absatztypen Einfachnennungen
-		  ArrayList<Integer> singleTags = new ArrayList<Integer>();
-		  singleTags.add( psChoiceSingle );
-
-		  //Absatztypen Einfachnennung Nonopinion
-		  ArrayList<Integer> singleNonOpinionTags = new ArrayList<Integer>();
-		  singleNonOpinionTags.add( psChoiceSingleNonOpinion );
-
-		  //Absatztypen, die nur in mehrfachnennungen vorkommen
-		  ArrayList<Integer> multipleTags = new ArrayList<Integer>();
-		  multipleTags.add( psChoiceMultiple );
-
-		  //Absatztypen, die nur in Matrix-Einfachnennung vorkommen
-		  ArrayList<Integer> matrixSingleTags = new ArrayList<Integer>();
-		  matrixSingleTags.add( psMatrixHeadSingle );
-		  matrixSingleTags.add( psMatrixSingleNonOpinion );
-
-		  //Absatztypen, die nur in Matrix-Mehrfachnennung vorkommen
-		  ArrayList<Integer> matrixMultipleTags = new ArrayList<Integer>();
-		  matrixMultipleTags.add( psMatrixHeadMultiple );
-
-		  //Absatztypen, die nur in LIkert-Skalen vorkommen
-		  ArrayList<Integer> likertTags = new ArrayList<Integer>();
-		  likertTags.add( psLikertLeft );
-		  likertTags.add( psLikertMid );
-		  likertTags.add( psLikertRight );
-
-
-
-		  //Enthält Dokument NewPage Absätze?
-		  boolean pagesPresent = false;
-		  for (int i = 0; i < writerContentBuffer.size(); i++){
-			  if ( ((WriterParagraph) writerContentBuffer.get( i )).parStyle ==  psCaptionNewPage ){
-				  pagesPresent = true;
-				  break;
-			  }
-		  }
-
-
-
-		  //Iterieren über alle Absätze
-		  //String scale;
-		  //String scaleType;
-		  int parStyle, formerParStyle, nextParStyle;
-		  int scalePointCount = 0;
-		  //Prüfvariable, ob multiple-Eigenschaft gesetzt wurde
-		  boolean multipleWasSet = false;
-		  String parContent;
-		  for (int i = 0; i < writerContentBuffer.size(); i++){
-
-
-			  //scaleType = "";
-			  parStyle = ((WriterParagraph) writerContentBuffer.get( i )).parStyle;
-			  parContent = ((WriterParagraph) writerContentBuffer.get( i )).parContent;
-
-        	  //if( scaleTags.contains( parStyle )) scale = "Skala";
-        	  //else scale = "keine Skala";
-
-
-        	  //Neue Seite?
-        	  //Erster Absatz
-        	  if( i == 0 && parStyle != psCaptionNewPage ){
-        		  if( pagesPresent ){
-
-        			  //System.out.println("  Neue Seite");
-        			  //Neuen Seitenabschnitt erzeugen
-        			  pageCounter++;
-        			  currentPage = new QstnSection();
-        			  currentPage.setSectionType( QstnSection.TYPE_PAGE );
-        			  //Zum testen Namen setzten
-        			  currentPage.setName("Seite " + pageCounter );
-        			  qstn.add( currentPage );
-        			  //Kommentieren
-        			  currentSection = currentPage;
-
-        		  }
-        	  }
-        	  //Absatz 2-N
-        	  else{
-        		  if ( parStyle == psCaptionNewPage ){
-    				  //System.out.println("  Neue Seite");
-           			  pageCounter++;
-        			  currentPage = new QstnSection();
-        			  currentPage.setSectionType( QstnSection.TYPE_PAGE );
-        			  //Zum testen Namen setzten wird in printcomponent() ausgegeben
-        			  currentPage.setName("Seite " + pageCounter );
-        			  qstn.add( currentPage );
-        			  //Kommentieren
-        			  currentSection = currentPage;
-
-    			  }
-        	  }
-
-
-        	  //Neue Section
-        	  if ( parStyle == psCaption ){
-				  //System.out.println("  Neue Section");
-				  currentSection = new QstnSection();
-				  currentSection.setSectionType( QstnSection.TYPE_SECTION );
-				  currentSection.setTitle( parContent );
-				  //Zum Testen Namen setzen (wird in printcomponent() ausgegeben)
-				  currentSection.setName( "Caption: " + parContent );
-				  currentPage.add( currentSection );
-
-			  }
-
-
-        	  //Neues Item?
-        	  //Erster Absatz
-        	  if ( i == 0 ){
-        		 if ( itemTags.contains( parStyle )){
-        			 currentItem = new Item();
-        			 currentSection.add( currentItem );
-        			 //System.out.println("--neues Item--");
-        		 }
-        	  }
-        	  //Absatz 2 bis N
-        	  else{
-        		  formerParStyle = ((WriterParagraph) writerContentBuffer.get( i-1 )).parStyle;
-    			  if((itemTags.contains( parStyle )) && (! itemTags.contains( formerParStyle ) )){
-    				  currentItem = new Item();
-         			  currentSection.add( currentItem );
-         			  //System.out.println("--neues Item--");
-    			  }
-        	  }
-
-
-
-        	  //Intro mit Elternelement Section
-        	  if ( parStyle == psIntro ){
-        		  QstnIntro intro = new QstnIntro( parContent );
-        		  currentSection.add( intro );
-        	  }
-
-
-
-
-
-        	  //Item-Intro
-        	  //Ein Intro innerhalb eines Items wird als Intro kodiert
-			  //Mehrere nachfolgende Intros in Writer werden als ein
-			  //Intro mit mehreren Absätzen gespeichert.
-
-        	  //currentItem.add( new QstnIntro( parContent ));
-
-        	  if ( parStyle == psIntroItem ){
-
-        		  //Referenz auf aktuelles Intro aktualisieren
-        		  //erster Absatz
-        		  if( i == 0){
-        			  currenItemIntro = new QstnIntro();
-        			  currentItem.add( currenItemIntro );
-        		  }
-        		  //Absatz 2 bin N
-        		  //Neues Introobjekt wird nur erzeugt, wenn
-        		  //vorheriger Absatz kein instrobjekt war
-        		  //da mehrere Writer QuestionInstros in einem Intro-Objekt
-        		  //mit mehreren Absätzen gespeichert werden.
-        		  else{
-        			//vorheriger Absatz war kein Intro
-        			if( ((WriterParagraph) writerContentBuffer.get( i-1 )).parStyle != psIntroItem ){
-        				currenItemIntro = new QstnIntro();
-          			    currentItem.add( currenItemIntro );       			}
-        		  }
-
-        		  //Text zum aktuellen Intro hinzufügen
-        		  currenItemIntro.addTextParagraph( parContent );
-
-
-        	  }// Itemintro
-
-
-
-        	  //(Item-)Instruction
-        	  if ( parStyle == psInstruction ){
-
-        		  //Referenz auf aktuelle Instruction aktualisieren
-        		  //erster Absatz
-        		  if( i == 0){
-        			  currentInstruction = new QstnInstruction();
-        			  currentItem.add( currentInstruction );
-        		  }
-        		  //Absatz 2 bin N
-        		  //Neues Instructionobjekt wird nur erzeugt, wenn
-        		  //vorheriger Absatz kein instructionobjekt war
-        		  //da mehrere Writer Instructions in einem Instruction-Objekt
-        		  //mit mehreren Absätzen gespeichert werden.
-        		  else{
-        			//vorheriger Absatz war keine Instruktion
-        			if( ((WriterParagraph) writerContentBuffer.get( i-1 )).parStyle != psInstruction ){
-        				currentInstruction = new QstnInstruction();
-        				currentItem.add( currentInstruction );
-        			}
-        		  }
-
-        		  //Text zur aktuellen Instruktion hinzufügen
-        		  //currentItem.add( new QstnInstruction( parContent ));
-        		  currentInstruction.addTextParagraph( parContent );
-        	  }
-
-
-
-
-
-        	  //Question
-        	  if ( parStyle == psQuestion ){
-        		  currentItem.add( new QstnQuestion( parContent ));
-        	  }
-
-
-
-
-        	  //Ist Absatz erster Absatz einer neue Antwortskala?
-           	  //Erster Absatz des Dokumentes
-        	  if ( i == 0 ){
-        		 if ( scaleTags.contains( parStyle )){
-        			 currentChoices = new QstnChoices();
-        			 currentItem.add( currentChoices );
-        			 scalePointCount = 0;
-        			 multipleWasSet = false;
-        			 //System.out.println("--neues Antwortskala--");
-
-        		 }
-        	  }
-        	  //Absatz 2 bis N
-        	  else{
-        		  formerParStyle = ((WriterParagraph) writerContentBuffer.get( i-1 )).parStyle;
-    			  if((scaleTags.contains( parStyle )) && (! scaleTags.contains( formerParStyle ) )){
-    				  currentChoices = new QstnChoices();
-         			  currentItem.add( currentChoices );
-         			  scalePointCount = 0;
-         		      multipleWasSet = false;
-         			  //System.out.println("--neues Antwortskala--");
-    			  }
-        	  }
-
-
-  /*
-   *
-   * Logik beschreiben: ist bescheuert
-   *
-   */
-
-
-
-        	  //Absatz ist AntwortSkala
-        	  if( scaleTags.contains( parStyle )){
-
-        		  scalePointCount++;
-
-        		  //Skalentyp wird gesetzt
-        		  //Choice Objekt wird eingefügt
-
-        		  //Einfachnennung
-        		  if( singleTags.contains( parStyle )){
-        			  //Information zum Typ der Antwortskala wird im der Antwortskala und
-        			  //im Choivesobjekt gespeichert. Später ändern wenn Struktur klar ist
-        			  currentChoices.setChoiceType(QstnChoices.CHOICETYPE_CHOICES);
-        			  currentItem.setChoiceType( QstnChoices.CHOICETYPE_CHOICES );
-        			  currentChoices.setMultiple( false );
-        			  multipleWasSet = true;
-        			  Category category = new Category( parContent );
-        			  category.setOpen( false );
-        			  currentChoices.addChoice( category );
-        		  }
-        		  //Einfachnennung Nonopinion
-        		  if( singleNonOpinionTags.contains( parStyle )){
-        			  //Information zum Typ der Antwortskala wird im der Antwortskala und
-        			  //im Choivesobjekt gespeichert. Später ändern wenn Struktur klar ist
-        			  currentChoices.setChoiceType(QstnChoices.CHOICETYPE_CHOICES);
-        			  currentItem.setChoiceType( QstnChoices.CHOICETYPE_CHOICES );
-        			  currentChoices.setMultiple( false );
-        			  multipleWasSet = true;
-        			  Category category = new Category( parContent );
-        			  category.setOpen( false );
-        			  category.setNonOpinion( true );
-        			  currentChoices.addChoice( category );
-        		  }
-        		  //Mehrfachnennung
-        		  if( multipleTags.contains( parStyle )){
-        			  currentChoices.setChoiceType(QstnChoices.CHOICETYPE_CHOICES);
-        			  currentItem.setChoiceType(QstnChoices.CHOICETYPE_CHOICES);
-        			  currentChoices.setMultiple( true );
-        			  multipleWasSet = true;
-        			  Category category = new Category( parContent );
-        			  category.setOpen( false );
-        			  currentChoices.addChoice( category );
-        		  }
-            	  //Matrix-Einfachnennung (single, singleNonOpinion)
-        		  if( matrixSingleTags.contains( parStyle )){
-        			  currentChoices.setOrientation( QstnChoices.ORIENTATIN_HORIZONTAL );
-        			  currentChoices.setChoiceType( QstnChoices.CHOICETYPE_MATRIX );
-        			  currentItem.setChoiceType( QstnChoices.CHOICETYPE_MATRIX );
-        			  currentChoices.setMultiple( false );
-        			  multipleWasSet = true;
-        			  Category category = new Category( parContent );
-        			  category.setOpen( false );
-        			  if( parStyle == psMatrixSingleNonOpinion ){
-        				  category.setNonOpinion( true );
-        			  }
-        			  currentChoices.addChoice( category );
-        		  }
-            	  //Matrix Mehrfachnennung
-        		  if( matrixMultipleTags.contains( parStyle )){
-        			  currentChoices.setOrientation( QstnChoices.ORIENTATIN_HORIZONTAL );
-        			  currentChoices.setChoiceType( QstnChoices.CHOICETYPE_MATRIX );
-        			  currentItem.setChoiceType( QstnChoices.CHOICETYPE_MATRIX );
-        			  currentChoices.setMultiple( true );
-        			  multipleWasSet = true;
-        			  Category category = new Category( parContent );
-        			  category.setOpen( false );
-        			  currentChoices.addChoice( category );
-        		  }
-            	  //Likertskala
-        		  if( likertTags.contains( parStyle )){
-        			  currentChoices.setChoiceType( QstnChoices.CHOICETYPE_LIKERT );
-        			  currentItem.setChoiceType( QstnChoices.CHOICETYPE_LIKERT );
-        			  currentChoices.setMultiple( false );
-        			  multipleWasSet = true;
-        			  Category category = new Category( parContent );
-        			  category.setOpen( false );
-        			  currentChoices.addChoice( category );
-        		  }
-
-        		  //Offene (Zusatz)Kategorie
-        		  if( parStyle == psChoiceOpenAddon ){
-        			  currentChoices.setChoiceType( QstnChoices.CHOICETYPE_CHOICES );
-        			  currentItem.setChoiceType( QstnChoices.CHOICETYPE_CHOICES );
-        			  Category category = new Category( parContent );
-        			  category.setOpen( true );
-        			  category.setLength( 50 );
-        			  currentChoices.addChoice( category );
-        		  }
-
-        		  //Offene Matrix-Kategorie
-        		  if( parStyle == psMatrixOpen ){
-        			  currentChoices.setChoiceType( QstnChoices.CHOICETYPE_MATRIX );
-        			  currentItem.setChoiceType( QstnChoices.CHOICETYPE_MATRIX );
-        			  Category category = new Category( parContent );
-        			  category.setOpen( true );
-        			  category.setLength( 20 );
-        			  currentChoices.addChoice( category );
-        		  }
-
-        		  //Offene (Einzel)Kategorie
-        		  if( parStyle == psChoiceOpen ){
-        			  currentChoices.setChoiceType( QstnChoices.CHOICETYPE_CHOICES );
-        			  currentItem.setChoiceType( QstnChoices.CHOICETYPE_CHOICES );
-        			  Category category = new Category( parContent );
-        			  category.setOpen( true );
-        			  category.setLength( 250 );
-        			  currentChoices.addChoice( category );
-        		  }
-
-
-        	  }//Absatz ist Antwortskala
-
-
-        	  //MatrixItem
-        	  if( parStyle == psMatrixItem ){
-        		  currentChoices.addMatrixItem( parContent );
-        	  }
-
-
-        	  //Letzter Absatz Antwortskala?
-        	  //Skalentyp (multiple/single) festlegen, falls alle Antwortkategorien offen sind
-        	  //Absatz 2 bis N
-        	  if( i > 0 ){
-        		  if( i < writerContentBuffer.size()-1){
-
-        			  nextParStyle = ((WriterParagraph) writerContentBuffer.get( i+1 )).parStyle;
-        		      if(( scaleTags.contains( parStyle )) && ( ! scaleTags.contains( nextParStyle ) )){
-        		    	  //Multiple/Single Wert festlegen, falls alle Antwortkategorien offen sind
-        		    	  if (! multipleWasSet ){
-        		    		  if ( scalePointCount > 1 ) currentChoices.setMultiple( true );
-        		    		  else currentChoices.setMultiple( false );
-        		    	  }
-
-        			      //System.out.println("--Ende Antwortskala " + scalePointCount );
-        		      }
-        		  }//Zeile 2 bis N-1
-        		  //Zeile N
-        		  else{
-        			  if( scaleTags.contains( parStyle )){
-        				  //Multiple/Single Wert festlegen, falls alle Antwortkategorien offen sind
-        				  if (! multipleWasSet ){
-        		    		  if ( scalePointCount > 1 ) currentChoices.setMultiple( true );
-        		    		  else currentChoices.setMultiple( false );
-        		    	  }
-        				  //System.out.println("--Ende Antwortskala " + scalePointCount);
-        			  }
-        		  } // Zeile N
-        	  } //Letzter Absatz einer Antwortskala
-
-
-        	  //WriterParagraph par = writerContentBuffer.get( i );
-        	  //System.out.println( "["+ i +"] " + (String) styleMap.get(par.parStyle) + "["+ scale +"] " + scaleType  );
-
-
-          } // Alle Absätze
-
-
-
-
-		  //Testausgabe des Fragebogens
-
-		  //System.out.println("******************* Fragebogen-Modell **********************");
-		  //qstn.printComponent();
-
-
-
-
-
-
-
-
-
-
-
-
-		  //String exportFileName = aFileName + ".xml";
-
-		  //Konvertieren nach QML
-		  //Model2QmlConverter qmlConverter = new Model2QmlConverter( qstn, new File( exportFileName ));
-		  //qmlConverter.convert();
-
-		  //System.out.println("schreibe: " + exportFileName );
-
-	  }
-
 
 	  // ---- SAX DefaultHandler methods ----
 
@@ -1927,10 +1412,12 @@ import model.qstn.QstnSection;
 		  */
 
 		  //Überprüfen der eingelesenen Absätze
-		  boolean resOK = false;
+		  //move the call to writer2qml, move the declaration to TextParagraphList
+		  //boolean resOK = false;
 
 		  try{
-		  resOK =  checkParStyles();
+		  //resOK =  checkParStyles();
+		  checkParStyles();
 		  }catch(Exception e){
 				 //MessageBox messageBox = new MessageBox( shell, SWT.ICON_ERROR );
 				 //messageBox.setText( "Writer2QML: Fehler" );
@@ -1939,6 +1426,7 @@ import model.qstn.QstnSection;
 		  }
 
 
+		  /*
 		  if ( resOK ){
 
 			  convertParagraphs();
@@ -1951,7 +1439,7 @@ import model.qstn.QstnSection;
 
 
 		  }
-
+          */
 
 
 
@@ -2538,16 +2026,18 @@ if ( qName.equals("text:p")){
 
   //Titel des Fragebogens
   case psTitle:{
-	writerContentBuffer.add( new WriterParagraph( parsingState, titleText.toString()));
-	debugEcho( titleText.toString() + "\n");
-	titleText.delete(0, titleText.length());
-    parsingState = psNone;
-    break;
+textParagraphList.addParagraph(new TextParagraph(parsingState, titleText.toString()));
+	  writerContentBuffer.add( new WriterParagraph( parsingState, titleText.toString()));
+	  debugEcho( titleText.toString() + "\n");
+	  titleText.delete(0, titleText.length());
+      parsingState = psNone;
+      break;
   }
 
 
     //Intro der Section
     case psIntro:{
+    textParagraphList.addParagraph( new TextParagraph( parsingState, introText.toString()));
 		writerContentBuffer.add( new WriterParagraph( parsingState, introText.toString()));
 		debugEcho( introText.toString() + "\n");
 		introText.delete(0, introText.length());
@@ -2557,6 +2047,7 @@ if ( qName.equals("text:p")){
 
     //Intro des Items
     case psIntroItem:{
+    	textParagraphList.addParagraph( new TextParagraph( parsingState, introItemText.toString()));
 		writerContentBuffer.add( new WriterParagraph( parsingState, introItemText.toString()));
 		debugEcho( introItemText.toString() + "\n");
 		introItemText.delete(0, introItemText.length());
@@ -2567,6 +2058,7 @@ if ( qName.equals("text:p")){
 
   //Section
   case psCaption:{
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, captionText.toString()));
 	writerContentBuffer.add( new WriterParagraph( parsingState, captionText.toString()));
 	debugEcho( captionText.toString() + "\n");
 	captionText.delete(0, captionText.length());
@@ -2576,7 +2068,8 @@ if ( qName.equals("text:p")){
 
   //SectionNewPage
   case psCaptionNewPage:{
-	writerContentBuffer.add( new WriterParagraph( parsingState, captionNewPageText.toString()));
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, captionNewPageText.toString()));
+	  writerContentBuffer.add( new WriterParagraph( parsingState, captionNewPageText.toString()));
 	debugEcho( captionNewPageText.toString() + "\n");
 	captionNewPageText.delete(0, captionNewPageText.length());
 	parsingState = psNone;
@@ -2584,6 +2077,7 @@ if ( qName.equals("text:p")){
   }
 
   case psQuestion:{
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, questionText.toString()));
 	  writerContentBuffer.add( new WriterParagraph( parsingState, questionText.toString()));
 	  debugEcho( questionText.toString() + "\n");
 	  questionText.delete(0, questionText.length());
@@ -2592,6 +2086,7 @@ if ( qName.equals("text:p")){
   }
 
   case psInstruction:{
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, instructionText.toString()));
 	  writerContentBuffer.add( new WriterParagraph( parsingState, instructionText.toString()));
 	  debugEcho( instructionText.toString() + "\n");
 	  instructionText.delete(0, instructionText.length());
@@ -2600,6 +2095,7 @@ if ( qName.equals("text:p")){
   }
 
   case psChoiceSingle:{
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, choiceSingleText.toString()));
 	  writerContentBuffer.add( new WriterParagraph( parsingState, choiceSingleText.toString()));
 	  debugEcho( choiceSingleText.toString() + "\n");
 	  choiceSingleText.delete(0, choiceSingleText.length());
@@ -2610,7 +2106,8 @@ if ( qName.equals("text:p")){
 
 
   case psChoiceSingleNonOpinion:{
-	writerContentBuffer.add( new WriterParagraph( parsingState, choiceSingleNonOpinionText.toString()));
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, choiceSingleNonOpinionText.toString()));
+    writerContentBuffer.add( new WriterParagraph( parsingState, choiceSingleNonOpinionText.toString()));
 	debugEcho( choiceSingleNonOpinionText.toString() + "\n" );
 	choiceSingleNonOpinionText.delete(0, choiceSingleNonOpinionText.length());
 	parsingState = psNone;
@@ -2618,7 +2115,8 @@ if ( qName.equals("text:p")){
   }
 
   case psChoiceMultiple:{
-	  writerContentBuffer.add( new WriterParagraph( parsingState, choiceMultipleText.toString()));
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, choiceMultipleText.toString()));
+     writerContentBuffer.add( new WriterParagraph( parsingState, choiceMultipleText.toString()));
 	debugEcho( choiceMultipleText.toString() + "\n" );
 	choiceMultipleText.delete(0, choiceMultipleText.length());
 	parsingState = psNone;
@@ -2628,7 +2126,9 @@ if ( qName.equals("text:p")){
 
 
   case psChoiceOpenAddon:{
-      writerContentBuffer.add( new WriterParagraph( parsingState, choiceOpenAddonText.toString()));
+
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, choiceOpenAddonText.toString()));
+	  writerContentBuffer.add( new WriterParagraph( parsingState, choiceOpenAddonText.toString()));
       debugEcho( choiceOpenAddonText.toString() + "\n" );
       choiceOpenAddonText.delete(0, choiceOpenAddonText.length());
 	  parsingState = psNone;
@@ -2636,7 +2136,8 @@ if ( qName.equals("text:p")){
   }
 
   case psChoiceOpen:{
-	writerContentBuffer.add( new WriterParagraph( parsingState, choiceOpenText.toString()));
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, choiceOpenText.toString()));
+    writerContentBuffer.add( new WriterParagraph( parsingState, choiceOpenText.toString()));
   	debugEcho( choiceOpenText.toString() + "\n" );
 	choiceOpenText.delete(0, choiceOpenText.length());
 	  parsingState = psNone;
@@ -2644,6 +2145,7 @@ if ( qName.equals("text:p")){
   }
 
   case psMatrixHeadSingle:{
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, matrixHeadSingleText.toString()));
 	  writerContentBuffer.add( new WriterParagraph( parsingState, matrixHeadSingleText.toString()));
 	  	debugEcho( matrixHeadSingleText.toString() + "\n" );
 	  	matrixHeadSingleText.delete(0, matrixHeadSingleText.length());
@@ -2654,6 +2156,7 @@ if ( qName.equals("text:p")){
 
 
   case psMatrixHeadMultiple:{
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, matrixHeadMultipleText.toString()));
 	  writerContentBuffer.add( new WriterParagraph( parsingState, matrixHeadMultipleText.toString()));
 	  	debugEcho( matrixHeadMultipleText.toString() + "\n" );
 	  	matrixHeadMultipleText.delete(0, matrixHeadMultipleText.length());
@@ -2665,6 +2168,7 @@ if ( qName.equals("text:p")){
 
 
   case psMatrixOpen:{
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, matrixOpenText.toString()));
 	  writerContentBuffer.add( new WriterParagraph( parsingState, matrixOpenText.toString()));
 	  	debugEcho( matrixOpenText.toString() + "\n" );
 	  	matrixOpenText.delete(0, matrixOpenText.length());
@@ -2675,6 +2179,7 @@ if ( qName.equals("text:p")){
 
 
   case psMatrixSingleNonOpinion:{
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, matrixSingleNonOpinionText.toString()));
 	  writerContentBuffer.add( new WriterParagraph( parsingState, matrixSingleNonOpinionText.toString()));
 	  debugEcho( matrixSingleNonOpinionText.toString() + "\n" );
 	  matrixSingleNonOpinionText.delete(0, matrixSingleNonOpinionText.length());
@@ -2686,6 +2191,7 @@ if ( qName.equals("text:p")){
 
 
   case psMatrixItem:{
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, matrixItemText.toString()));
 	  writerContentBuffer.add( new WriterParagraph( parsingState, matrixItemText.toString()));
 	  	debugEcho( matrixItemText.toString() + "\n" );
 	  	matrixItemText.delete(0, matrixItemText.length());
@@ -2694,6 +2200,7 @@ if ( qName.equals("text:p")){
   }
 
   case psLikertLeft:{
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, likertLeftText.toString()));
 	  writerContentBuffer.add( new WriterParagraph( parsingState, likertLeftText.toString()));
 	  	debugEcho( likertLeftText.toString() + "\n" );
 	  	likertLeftText.delete(0, likertLeftText.length());
@@ -2702,6 +2209,7 @@ if ( qName.equals("text:p")){
   }
 
   case psLikertMid:{
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, likertMidText.toString()));
 	  writerContentBuffer.add( new WriterParagraph( parsingState, likertMidText.toString()));
 	  	debugEcho( likertMidText.toString() + "\n" );
 	  	likertMidText.delete(0, likertMidText.length());
@@ -2710,6 +2218,7 @@ if ( qName.equals("text:p")){
   }
 
   case psLikertRight:{
+	  textParagraphList.addParagraph( new TextParagraph( parsingState, likertRightText.toString()));
 	  writerContentBuffer.add( new WriterParagraph( parsingState, likertRightText.toString()));
 	  	debugEcho( likertRightText.toString() + "\n" );
 	  	likertRightText.delete(0, likertRightText.length());
