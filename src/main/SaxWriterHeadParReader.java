@@ -61,10 +61,10 @@ public class SaxWriterHeadParReader extends DefaultHandler {
 
 
 	//Konstruktor
-	public SaxWriterHeadParReader( TextParagraphList textParagraphList, ArrayList<WriterParagraph> writerContentBuffer ){
+	public SaxWriterHeadParReader( TextParagraphList textParagraphList ){
 
 		this.textParagraphList = textParagraphList;
-		this.writerContentBuffer = writerContentBuffer;
+		//this.writerContentBuffer = writerContentBuffer;
 
 		qstnTitleTags = new ArrayList<String>();
 		qstnTitleTags.add("qml_3a_title");
@@ -177,8 +177,7 @@ public class SaxWriterHeadParReader extends DefaultHandler {
 
 	        if( parsingState == psTitle ){
 	         textParagraphList.addParagraph(new TextParagraph(parsingState, titleText.toString()));
- 			    writerContentBuffer.add( new WriterParagraph( parsingState, titleText.toString()));
-	  	        titleText.delete(0, titleText.length());
+ 			    titleText.delete(0, titleText.length());
                 parsingState = psNone;
             }
 

@@ -94,6 +94,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import model.converter.Parapgraphs2SimpleQstnConverter;
 import model.simplequestionnaire.Model2QmlConverter;
 import model.simplequestionnaire.Qstn;
+import model.writerparagraphs.TextParagraph;
 import model.writerparagraphs.TextParagraphList;
 
 
@@ -1505,7 +1506,9 @@ public class Writer2QML {
 		 *
 		 */
 
+       /** read paragraphs **/
 
+       textParagraphList.clear();
 
 	   ZipFile zf = new ZipFile( fileName );
 	   //Titel aus style.xml lesen
@@ -1521,7 +1524,7 @@ public class Writer2QML {
 
 	   //styles.xml parsen
 //Achtung Q&D siehe oben Kommentar
-	   SaxWriterHeadParReader styleParsingHandler = new SaxWriterHeadParReader( textParagraphList, handler.writerContentBuffer );
+	   SaxWriterHeadParReader styleParsingHandler = new SaxWriterHeadParReader( textParagraphList );
 	   SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
 	   saxParser.parse( styleIs, styleParsingHandler );
 
@@ -1536,11 +1539,13 @@ public class Writer2QML {
 	   saxParser.parse( is, handler );
 
 
+	   /** check paragraphs **/
+       boolean paragraphListIsValid = textParagraphList.checkParStyles();
 
 
 
 	   /** convert paragraph list to zofar qml (the convert method is not implemented yet  ) **/
-	   if (handler.codingErrors.isEmpty()){
+	   if (paragraphListIsValid){
 		  //Paragraphs2ZofarQmlConverter.convertToZofarQml(textParagraphList);
 	   }
 
@@ -1549,7 +1554,7 @@ public class Writer2QML {
 
 	   /*********  convert paragraph list to simple questionnaire **********/
 	   //q&d, move codingError property and method W2qOodataReader.checkParStyles() to TextParagraphList
-	   if (handler.codingErrors.isEmpty()){
+	   if (paragraphListIsValid){
 		   qstn = Parapgraphs2SimpleQstnConverter.convertToSimpleQuestionnaire(textParagraphList);
 	   }
 
@@ -1564,7 +1569,7 @@ public class Writer2QML {
 
 	   /********************************* Modell nach QML Konvertieren *************************************/
 	   //Wenn keine Fehler aufgetreten sind konvertieren
-	   if( handler.codingErrors.isEmpty() ){
+	   if( paragraphListIsValid ){
 
 		   //Modell nach QML KOnvertieren
 		   //fileName hat keine Bedeutung
@@ -1612,7 +1617,7 @@ public class Writer2QML {
 
 
 	   //Statusmeldung
-	   if( handler.codingErrors.isEmpty() ){
+	   if( paragraphListIsValid ){
 		   setStatusMessage( "Ausgabe gespeichert: " + xmlFileName );
 	   }else setStatusMessage( "" );
 
@@ -1628,7 +1633,7 @@ public class Writer2QML {
 	   //Achtung: Nur wenn vorher alles geklappt hat.
 	   //Dateiexport exceptions etc. behandeln mit hatAllesGeklappt Flag
 	   //Wenn keine Fehler aufgetreten sind Ergebnisdatei nach HTML Umwandeln
-	   if( handler.codingErrors.isEmpty() ){
+	   if( paragraphListIsValid ){
 		   //display.asyncExec( new UpdateHtmlViewRunnable() );
 		   Thread thread = new Thread( new UpdateHtmlViewRunnable() );
 		   thread.start();
@@ -1692,7 +1697,7 @@ public class Writer2QML {
 
 
 	   //Keine Fehler vorhanden: Diese Information als Baumknoten ausgeben
-	   if( handler.codingErrors.isEmpty() ){
+	   if( paragraphListIsValid ){
 	       TreeItem node = new TreeItem( rootNode, SWT.NONE );
 		   node.setText("QML-Datei gespeichert");
 		   node.setImage( iconOkEnabled );
@@ -1707,7 +1712,7 @@ public class Writer2QML {
 
 
 	   //Sonderfall: Datei enthält keine Absätze aber Fehler
-	   if( (! handler.codingErrors.isEmpty()) && ( handler.writerContentBuffer.isEmpty() ) ){
+	   if( (! paragraphListIsValid) && ( textParagraphList.isEmpty() ) ){
 
 		   //Fehlermessage
 		   String errMessage = "[0] Writer Datei enthält keine gültigen QML-Formate ";
@@ -1738,7 +1743,8 @@ public class Writer2QML {
 	   //Iterator über Fehler initialisieren
 	   //currentError referenziert erstes Fehlerobjekt oder Null
 	   StyleCodingError currentError;
-	   Iterator<StyleCodingError> errorIt = handler.codingErrors.iterator();
+	   //Iterator<StyleCodingError> errorIt = handler.codingErrors.iterator();
+	   Iterator<StyleCodingError> errorIt = textParagraphList.errorIterator();
 	   if( errorIt.hasNext()){
 		   currentError = ( StyleCodingError ) errorIt.next();
 	   } else
@@ -1746,14 +1752,14 @@ public class Writer2QML {
 
 
 	   //Über alle Absätze iterieren
-	   Iterator<WriterParagraph> parIt = handler.writerContentBuffer.iterator();
+	   Iterator<TextParagraph> parIt = textParagraphList.iterator();
 
  //Absatzzähler: Besser Absatznummer als Instanzvariable von Absatz?
 	   int parCounter=0;
 	   while( parIt.hasNext() ){
 
 		   parCounter++;
-		   WriterParagraph par = (WriterParagraph) parIt.next();
+		   TextParagraph par = (TextParagraph) parIt.next();
 
 		   //Absatzinformationen in messageText kopieren;
 		   //Besser erst in Stringbuffer  kopieren, dann append aufrufen?
@@ -1761,12 +1767,11 @@ public class Writer2QML {
 		   //Besser Zeilenumpruch vor beginn einer Zeile anhängen?
 
 
-		   String parStyleStr = "[" + handler.styleMap.get( par.parStyle ) + "]";
-
+		   String parStyleStr = "[" + textParagraphList.styleMap.get( par.getStyle() ) + "]";
 
 		   messageText.append( "["+parCounter+"] ");
 		   parStyleOffset = messageText.getCharCount();
-		   messageText.append( parStyleStr + "  " + par.parContent );
+		   messageText.append( parStyleStr + "  " + par.getContent() );
 
 
 		   //Formatstring Dunkelgrün darstellen
@@ -1779,7 +1784,7 @@ public class Writer2QML {
 
 
 		   //Leerer Absatz
-		   if( par.parContent.length() == 0 ){
+		   if( par.getContent().length() == 0 ){
 
 			   String emptyMarker = "(leer)";
 
@@ -1889,7 +1894,7 @@ public class Writer2QML {
 	   //Falls Fehler existieren, zumn ersten Fehler navigieren
 	   //und Baumknoten markieren
 
-	   if( ! handler.codingErrors.isEmpty() ){
+	   if( ! paragraphListIsValid ){
 		   if( rootNode.getItemCount() > 0){
 		       TreeItem firstChildNode = rootNode.getItem( 0 );
 		       if( firstChildNode.getData() != null ){
