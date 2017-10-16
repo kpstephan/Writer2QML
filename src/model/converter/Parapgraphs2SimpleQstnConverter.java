@@ -18,7 +18,7 @@ import model.writerparagraphs.TextParagraphList;
  public class Parapgraphs2SimpleQstnConverter {
 
 
-    //Konstanten für Absätztypen, nur an einer Stelle definieren.
+    //Konstanten für Absätztypen, nur an einer Stelle definieren (=> TextparagraphList)
 	static final int psNone = 0;
 	static final int psTitle = 1;
 	static final int psIntro = 3;
