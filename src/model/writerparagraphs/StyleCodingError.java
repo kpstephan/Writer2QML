@@ -19,7 +19,7 @@
 
 */
 
-package main;
+package model.writerparagraphs;
 
 //Fehler während des Parsings, mehreren Klassen zur verfügung stehen daher
 //Eigene Klassendatei

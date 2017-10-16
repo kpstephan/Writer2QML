@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import main.StyleCodingError;
-
 public class TextParagraphList {
 
 	   //Konstanten für Absätztypen, nur an einer Stelle definieren (=> TextparagraphList)

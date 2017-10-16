@@ -94,6 +94,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import model.converter.Parapgraphs2SimpleQstnConverter;
 import model.simplequestionnaire.Model2QmlConverter;
 import model.simplequestionnaire.Qstn;
+import model.writerparagraphs.StyleCodingError;
 import model.writerparagraphs.TextParagraph;
 import model.writerparagraphs.TextParagraphList;
 
