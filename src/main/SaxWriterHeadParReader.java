@@ -44,7 +44,6 @@ public class SaxWriterHeadParReader extends DefaultHandler {
 	private TextParagraphList textParagraphList;
 
 	//Referenz auf Liste zur Speicherung der gelesenen Absätze
-	public  ArrayList<WriterParagraph> writerContentBuffer;
 
 	//Liste zum Speichern der Formatvorlagennamen,
 	//die intern für qml:title verwendet werden
