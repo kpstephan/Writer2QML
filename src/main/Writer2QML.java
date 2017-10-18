@@ -61,10 +61,6 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
@@ -76,10 +72,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
@@ -151,7 +145,6 @@ public class Writer2QML {
   MenuItem miExportHtml;
 
   //Hauptbereiche des Anwendungsfensters
-  //CoolBar coolbar;
   ToolBar toolBar;
   final Composite clientBereich;
   final Composite statusBar;
@@ -204,13 +197,7 @@ public class Writer2QML {
   private Color bgSelected;
 
   //Eventhandler
-  //Gewirr überarbeiten
-  MouseOver mouseOver1 = new MouseOver();
-  ButtonClick buttonClick1 = new ButtonClick();
-  MouseClick mouseClick1 = new MouseClick();
-  MyListener listener1 = new MyListener();
   MenuSelected menuSelected1 = new MenuSelected();
-  MouseMove mouseMove1 = new MouseMove();
   OpenSelected openSelected = new OpenSelected();
   HelpSelected helpSelected = new HelpSelected();
   AboutSelected aboutSelected = new AboutSelected();
@@ -244,7 +231,6 @@ public class Writer2QML {
 	fs = System.getProperty( "file.separator" );
 	appDir = System.getProperty( "user.dir" );
 	homeDir = System.getProperty( "user.home" );
-	//System.out.println( homeDir + fs );
 
     shell.setLayout(new GridLayout());
 
@@ -290,10 +276,6 @@ public class Writer2QML {
     miExportHtml.setText("HTML Ansicht..");
     miExportHtml.addSelectionListener( exportHtmlSelected );
     miExportHtml.setEnabled( false );
-
-
-    //MenuItem miExportMessages = new MenuItem( miExport, SWT.PUSH );
-    //miExportMessages.setText( "Meldungen Writerimport" );
 
 
     @SuppressWarnings("unused")
@@ -377,13 +359,7 @@ public class Writer2QML {
 
 
     //Unterer Clientbereich für ScrolledCompsite und Composite
-    //final Composite clientBereich = new Composite(shell, SWT.BORDER);
     clientBereich.setLayoutData(new GridData(GridData.FILL_BOTH));
-    //clientBereich.setLayout(new FillLayout());
-
-    //Hilfspanel zur Formatierung
-    //Wenns funktioniert erklären
-    //clientPanel = new Composite( clientBereich, SWT.NONE );
 
 
     //Layout für Clientbereich
@@ -519,10 +495,6 @@ public class Writer2QML {
     //bgSelected = display.getSystemColor( SWT.COLOR_LIST_BACKGROUND);
 
 
-    //Testen der regex Versuche
-    //testRegex();
-
-
 
     //nicht im Konstruktor, procedure run
     shell.open ();
@@ -623,82 +595,6 @@ public class Writer2QML {
 
 	  } //lineGetStyle()
   } // XmlLineStyleListener
-
-
-
-  //EventListener
-  //für Knöpfe wird gewöhnlich ein SelectionListener verwendet
-  //Ändern
-  final class ButtonClick implements MouseListener{
-    public void mouseDown( MouseEvent e){
-
-   	  String buttonPressed = ((Button)e.widget).getText();
-
-      //Anhängen wurde gedrückt
-      if (buttonPressed.equals("Neues Item")){
-	    System.out.println("mouseDown: "+ ((Button)e.widget).getText());
-
-
- 	  } // Knopf Neues Item
-
-  }
-
-
-
-    public void mouseUp( MouseEvent e){
- 	}
-
-    public void mouseDoubleClick( MouseEvent e){
-	}
-
-  }//ButtonClick;
-
-
-
-  //MouseClick
-  final class MouseClick implements MouseListener{
-    public void mouseDown( MouseEvent e){
-      System.out.println("mouseDown");
-	}
-
-   public void mouseUp( MouseEvent e){
-	 System.out.println("mouseUp");
-   }
-
-   public void mouseDoubleClick( MouseEvent e){
-
-   }
-
-}//MouseClick;
-
-  //funktioniert auch nicht
-  final class MyListener implements Listener{
-	public void handleEvent(Event event) {
-	  switch (event.type){
-	  case SWT.MouseUp:
-		System.out.println("mouseUp ungetypt");
-	    break;
-	  }
-
-	}
-  }
-
-
- final class MouseMove implements MouseMoveListener{
- 	public void mouseMove(MouseEvent e) {
-	}
- }
-
-
-
-  final class MouseOver implements MouseTrackListener{
-    public void mouseEnter( MouseEvent e){
-	}
-
-	public void mouseExit( MouseEvent e){}
-	public void mouseHover( MouseEvent e){}
-  }
-
 
 
 
@@ -1024,70 +920,6 @@ public class Writer2QML {
 
 
 
-		  /*
-		  String destHtmlFileName = dlg.open();
-		  if( destHtmlFileName != null ){
-
-			  String htmlFileFolderName = "writer2qmlHtmlFiles";
-
-			  String currentDirName = dlg.getFilterPath() + fs + htmlFileFolderName;
-			  String sourceHtmlFileName = appDir + fs + "xslt" + fs + "out.html";
-			  String sourceCssFileName = appDir + fs + "xslt" + fs + htmlFileFolderName + fs + "style.css";
-			  String destCssFileName = currentDirName + fs + "style.css";
-
-			  File currentDir = new File( currentDirName );
-			  File sourceHtmlFile = new File( sourceHtmlFileName );
-			  File destHtmlFile = new File( destHtmlFileName );
-			  File sourceCssFile = new File( sourceCssFileName );
-			  File destCssFile = new File( destCssFileName );
-
-
-
-
-			  //Verwendetes Verzeichnis speichern
-			  settings.setValue( "lastHtmlDir", dlg.getFilterPath());
-
-
-			  if( sourceHtmlFile.exists() ){
-
-			     String htmlContentString = readTextFile( sourceHtmlFileName );
-			     //System.out.println( htmlContentString );
-
-			      //Existiert Datei Bereits?
-				  if( ! destHtmlFile.exists() ){
-					//HTML-Datei
-					  copyFile( sourceHtmlFile, destHtmlFile );
-					  //Verzeichnis
-					  if( ! currentDir.exists()) currentDir.mkdir();
-					  //CSS Datei
-					  copyFile( sourceCssFile, destCssFile );
-				  }
-				  //Datei existiert bereits
-				  else{
-				      //Dialog zum Nachfragen
-					  MessageBox mb = new MessageBox( shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO );
-					  mb.setText( "Datei Überschreiben?" );
-					  mb.setMessage( "Die Datei " + destHtmlFileName + "existiert bereits." +
-					    "möchten Sie die Datei Überschreiben?");
-					  int res = mb.open();
-					  if( res == SWT.YES ){
-						  //HTML-Datei
-						  copyFile( sourceHtmlFile, destHtmlFile );
-						  //Verzeichnis
-						  if( ! currentDir.exists()) currentDir.mkdir();
-						  //CSS Datei
-						  copyFile( sourceCssFile, destCssFile );
-
-					  } //Dialog bestätigt
-
-				  } //Zieldatei existiert bereits
-
-		      } //SourceFile existiert
-
-		  }  //Dateiname wurde ausgewählt
-
-		  */
-
 	  } //Selected
 
   }//Listener
@@ -1389,22 +1221,6 @@ public class Writer2QML {
 		  //Aktuelle Styleranges zur späteren Wiederherstellung speichern
 		  ranges = messageText.getStyleRanges( lineOffset, lineCharCount );
 
-		  //??Methode gibt einen zweiten Range mit seltsamen Parametern zurück
-
-		  //???Gibt immer einen zweiten Range mit merkwürdigen längen zurück
-		  /*
-		  System.out.println("Bereich Start: " + lineOffset + " Länge : " + lineCharCount );
-		  System.out.println( "AnzahlR: " + ranges.length );
-		  for( int i = 0; i < ranges.length; i++){
-			  System.out.println();
-			  System.out.println( "***Range " + i );
-			  System.out.println( "Start " + ranges[ i ].start );
-			  System.out.println( "Length: " + ranges[ i ].length );
-			  System.out.println( "BG: " + ranges[ i ].background );
-			  System.out.println( "FG: " + ranges[ i ].foreground );
-
-		  }
-		  */
 
 		  //Hintergrundfarbe der Zeile auf "markiert" setzen
 		  messageText.setLineBackground( lineIndex , 1, bgSelected );
@@ -1521,7 +1337,7 @@ public class Writer2QML {
 
 //SaxHandler zum parsen des comntents wird hier schon erzeugt,
 //Um dort verwaltete Liste Q&D übergeben zu können (siehe oben Kommentar)
-	   W2qOoDataReader handler =  new W2qOoDataReader( textParagraphList, fileName );
+	   W2qOoDataReader handler =  new W2qOoDataReader( textParagraphList );
 
 	   //styles.xml parsen
 //Achtung Q&D siehe oben Kommentar

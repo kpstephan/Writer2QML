@@ -79,16 +79,10 @@ import model.writerparagraphs.TextParagraphList;
 
         private boolean debugMode = false;
 
-		//private int valueCount;
 		@SuppressWarnings("unused")
 		private Locator locator;
 
-		//q&d zum weiterreichen des Dateinamens
-		@SuppressWarnings("unused")
-		private String aFileName;
-
-
-	    //Listen zum Speichern der Formatvorlagen Namen
+		//Listen zum Speichern der Formatvorlagen Namen
 
 		ArrayList<String> qstnTitleTags;
 		ArrayList<String> introTags;
@@ -118,9 +112,6 @@ import model.writerparagraphs.TextParagraphList;
 		ArrayList<String> likertMidTags;
 		ArrayList<String> likertRightTags;
 
-		//Liste zum Zwischenspeichern von Matrix-Antwortkategorie
-		//ArrayList matrixHeadCategiories;
-
 
 		StringBuffer titleText = new StringBuffer("");
 		StringBuffer introText = new StringBuffer("");
@@ -149,7 +140,6 @@ import model.writerparagraphs.TextParagraphList;
 		//Variablen für Parsing
 		//nur an einer Stelle deklarieren
 		int parsingState;
-		int formerParsingState;
 
 		static final int psNone = 0;
 		static final int psTitle = 1;
@@ -195,11 +185,6 @@ import model.writerparagraphs.TextParagraphList;
 
 		String currentMatrixItemText = "";
 
-		//Varaiblen für Parsing von Likert Items
-		//QstnItem currentLikertItem;
-		//Category currentLikertCategory;
-		//String currentLikertLeft = "";
-		//String currentLikertRight = "";
 
 		//Funktion zum Ausgeben von Debug Informationen
 		private void debugEcho( String echo ){
@@ -211,18 +196,9 @@ import model.writerparagraphs.TextParagraphList;
 
 
 		//Konstruktor
-		public W2qOoDataReader( TextParagraphList textParagraphList, String fileName){
+		public W2qOoDataReader( TextParagraphList textParagraphList){
 
 			this.textParagraphList = textParagraphList;
-
-			//q&d zum Übergeben des Dateinamens
-			//Wer liest das??
-			this.aFileName = fileName;
-
-			formerParsingState = psNone;
-
-
-
 
 			//Aus Kompatibilitätserwägungen werden Absatzformatnamen
 			//aus älteren Versionen akzeptiert. Die Syntax zum Eintragen der mappings lautet:
@@ -311,11 +287,6 @@ import model.writerparagraphs.TextParagraphList;
 			 */
 
 
-
-
-			//matrixHeadCategiories = new ArrayList();
-
-
 			qstnTitleTags = new ArrayList<String>();
 			qstnTitleTags.add("qml_3a_title");
 
@@ -399,36 +370,6 @@ import model.writerparagraphs.TextParagraphList;
 	  public void setDocumentLocator (Locator locator){
 		  this.locator = locator;
 	  }
-
-
-	  /*
-
-	  //Konstruktor parst gleich
-	  public OOoDataReader( String dataFile ){
-
-		  try {
-		    // Use an instance of ourselves as the SAX event handler
-			//!!Objekt Defaulthandler wird von Konstruktor erzeugt ?? weil keine main methode??
-		    //DefaultHandler handler = new ExampleSaxEcho();
-		    // Parse the input with the default (non-validating) parser
-		    SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
-		    //saxParser.parse( new File( qmlFile ), handler );
-		    saxParser.parse( new File( dataFile ), this );
-		    //System.exit( 0 );
-		  } catch( Throwable t ) {
-		    t.printStackTrace();
-	//!!Hier nicht abbrechen sondern exception in programm behandeln
-		    System.exit( 2 );
-		  }
-
-	  } //constructor
-
-
-	  */
-
-
-
-
 
 
 
@@ -628,22 +569,6 @@ import model.writerparagraphs.TextParagraphList;
 	    if ( qName.equals("text:p")){
 
 
-	    	/* Neue Logik implementieren:
-	    	 *
-	    	 * Zuerst werden  Absätze in Liste geschrieben.
-	    	 * Diese Liste wird dann geprüft und bei Erfolg
-	    	 * Konvertiert.
-	    	 *
-	    	 * Bei startElement() wird nur je nach Absatzvorlage
-	    	 * StatusVariable gesetzt. Bei chracters() Variable mit übergebenen
-	    	 * Zeichen füllen. Dann bei endElememt() Status (welche Vorlage) und
-	    	 * String in Liste schreiben.
-	    	 *
-	    	 *     Dann Liste weiterverarbeiten
-	    	 *
-	    	 */
-
-
 	    	parsingState = psNone;
 
 
@@ -665,8 +590,6 @@ import model.writerparagraphs.TextParagraphList;
 
 	    	//Die Zuweisung der Absatzvorlagen findet im Attribut "text:style-name" statt
 
-	    	//Problem: An dieser Stelle (Startelement) oder bei Textknoten
-	    	//Eigenschaften (z.B. offen) eingügen? Hier!
 
 	    	//Wert des Attributes
 	    	textStyleName = attrs.getValue("text:style-name");
@@ -847,29 +770,17 @@ import model.writerparagraphs.TextParagraphList;
 	  throws SAXException
 	  {
 
-		//evtl mit chars nicht mit string arbeiten,
-		//da sonst zuviele Strings erzeigt werden
 		String s = new String( buf, offset, len );
 
 
 	    //Textknoten ist nicht leer
 	    if (( s.trim() ).length() != 0 ){
 
-	    	 //System.out.println("  Textknoten: " + s );
-	     //    System.out.println( s );
 
 	    /*
 	     * Wenn Texte einer Formatzuweisung (z.B. Frage) im OOo Dokument formatiert sind (z.B.) unterstrichen,
 	     * wird der Text durch mehrfachen aufruf der characters() Funktion übergeben. Aus diesem Grund
 	     * werden die aktuellen Texte an evtl. bestehende angefügt.
-	     *
-	     * TDO Evtl. Tabs und hervorhebungen gesondert behandeln
-	     */
-
-
-	    /*
-	     * hier nur Variablen captionText etc. mit Text füllen
-	     * Variablen vorher deklarieren
 	     *
 	     */
 
@@ -1007,21 +918,9 @@ import model.writerparagraphs.TextParagraphList;
 //Textabsätze
 if ( qName.equals("text:p")){
 
-	/*
-	 * Funktioniert das, bei Textabsätzen den ParsingState abzufragen?
-	 * Kann persingstate evtl zu früh zurückgesetzt werden?
-	 *
-	 */
 
-
-	//Kann switching durch parametrisierung vermieden werden?
-	//erstmal so lassen
   switch ( parsingState ){
 
-
-
-  //Hier müssen Elementnamen (Formatnamen) abgefragt werden und dann parsingstate
-  //Zurückgesetzt werden
 
 
   //Titel des Fragebogens
