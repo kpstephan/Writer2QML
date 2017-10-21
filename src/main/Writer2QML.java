@@ -34,15 +34,9 @@ package main;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.regex.Matcher;
@@ -690,7 +684,7 @@ public class Writer2QML {
 
 				  //Existiert Datei?
 				  if( ! outFile.exists() ){
-					  writeStringtoIsoFile( fileName, messageContentString );
+					  Utilities.writeStringtoIsoFile( fileName, messageContentString );
 				  }
 				  //Datei existiert bereits
 				  else{
@@ -701,7 +695,7 @@ public class Writer2QML {
 							  "möchten Sie die Datei Überschreiben?");
 					  int res = mb.open();
 
-					  if( res == SWT.YES ) writeStringtoIsoFile( fileName, messageContentString );
+					  if( res == SWT.YES ) Utilities.writeStringtoIsoFile( fileName, messageContentString );
 
 
 				  }
@@ -715,36 +709,6 @@ public class Writer2QML {
 	  } //Selected
 
   }//Listener
-
-
-
-
-
-  //Schreibt String in Datei
-  //Später noch Kodierung übergeben, mit unterem zusammenfassen
-  //Später Rückgabewert
-  private void writeStringtoIsoFile( String fileName, String fileContent){
-
-	  File file = new File( fileName );
-      try {
-          Writer fileOut = new BufferedWriter(new OutputStreamWriter(new FileOutputStream( file ), "ISO-8859-1"));
-          fileOut.write( fileContent ); // in die Datei schreiben
-          fileOut.flush(); // Puffer leeren
-          fileOut.close(); // Datei schliessen
-      } catch (UnsupportedEncodingException e) {
-          // sollte nicht vorkommen
-          e.printStackTrace();
-      } catch (FileNotFoundException e) {
-          // sollte nicht vorkommen
-          e.printStackTrace();
-      } catch (IOException e) {
-          // Schreibfehler
-          e.printStackTrace();
-          // weiter Fehlerbehandlung ergänzen....
-      }
-  }
-
-
 
 
 
@@ -799,7 +763,7 @@ public class Writer2QML {
 
 				  //Existiert Datei?
 				  if( ! outFile.exists() ){
-					  writeStringtoIsoFile( fileName, qmlFileContentString);
+					  Utilities.writeStringtoIsoFile( fileName, qmlFileContentString);
 				  }
 				  //Datei existiert bereits
 				  else{
@@ -810,7 +774,7 @@ public class Writer2QML {
 							  "möchten Sie die Datei Überschreiben?");
 					  int res = mb.open();
 
-					  if( res == SWT.YES ) writeStringtoIsoFile( fileName, qmlFileContentString);
+					  if( res == SWT.YES ) Utilities.writeStringtoIsoFile( fileName, qmlFileContentString);
 
 
 				  }
@@ -826,32 +790,6 @@ public class Writer2QML {
 	  } //Selected
 
   }//Listener
-
-
-
-
-  // Copies src file to dst file.
-  // If the dst file does not exist, it is created
-  void copyFile(File src, File dst){
-
-	  try{
-      InputStream in = new FileInputStream(src);
-      OutputStream out = new FileOutputStream(dst);
-
-      // Transfer bytes from in to out
-      byte[] buf = new byte[1024];
-      int len;
-      while ((len = in.read(buf)) > 0) {
-          out.write(buf, 0, len);
-      }
-      in.close();
-      out.close();
-	  }catch(IOException e){
-		  //behandeln
-		  e.printStackTrace();
-	  }
-  }
-
 
 
 
@@ -908,7 +846,7 @@ public class Writer2QML {
 					      //Datei Kopieren
 				          sourceFileName = xsltDir + fs + dir[ i ];
 				          destFileName = destDirName + fs + dir[ i ];
-				          copyFile( new File(sourceFileName), new File(destFileName) );
+				          Utilities.copyFile( new File(sourceFileName), new File(destFileName) );
 
 				      } //Datei soll kopiert werden
 
@@ -1422,7 +1360,7 @@ public class Writer2QML {
 		   String xslXmlFileName =  appDir + fs + "xslt" + fs + "in.xml";
 
 		   //String in Datei schreiben, Zeichenkodierung ISO
-		   writeStringtoIsoFile( xslXmlFileName, qmlFileContentString);
+		   Utilities.writeStringtoIsoFile( xslXmlFileName, qmlFileContentString);
 
 		   //UI aktualisieren
 		   qmlTab.setImage( iconOkEnabled );
