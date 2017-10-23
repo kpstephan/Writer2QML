@@ -36,16 +36,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
@@ -78,7 +74,9 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.xml.sax.SAXException;
 
+import model.converter.ODFParagraphsExtractor;
 import model.converter.Parapgraphs2SimpleQstnConverter;
 import model.simplequestionnaire.Model2QmlConverter;
 import model.simplequestionnaire.Qstn;
@@ -1182,9 +1180,6 @@ public class Writer2QML {
 
 
 
-//Datei Konvertieren
-//Logik dieser Funktion ändern, Teile als Funktionen ausgliedern, wie etwa message füllen -> ShowMessage()
-
   public void convertWriterFile(String fileName ){
 
 	  //Letzte geöffnete Datei speichern
@@ -1212,43 +1207,7 @@ public class Writer2QML {
 	  messageText.setText("");
 
 
-
-	  try {
-
-	  /* TDO Klassenstruktur ändern
-	   * Struktur ändern: Ein neues Objekt OdtParagraphReader, welches
-	   * eine Liste mit den Absätzen und eine Liste mit Fehlern verwaltet
-	   * muss die zip-Datei öffnen, styles.xml mit dem parser lesen,
-	   * content.xml mit dem parser lesen, die eingelesenen Absätze prüfen
-	   * und bei Fehlerfreiheit den Inhalt in ein Qstn Obejtk einfügen.
-	   *
-	   *  Aktuell hat w2qOoDataReader die Funktion zur Verwaltung der
-	   *  Absatz- und Fehlerliste (und des Qstn Modells) und die
-	   *  Funktionalität zum parsen von content.xml
-	   *
-	   *   Zur Bereitstellung des Titels aus der ODT Datei wird *Q&D* die
-	   *   Absatzliste aus w2qOoDataReader als public deklariert, die dem
-	   *   styleparser dann zum Speichern der Absätze übergeben wird.
-	   *   Also
-	   *   1. erzeugen w2qOoDataReader
-	   *   2. parsen mit styleParsingHandler( w2qOoDataReader.absatzliste )
-	   *   3. pasen mit w2qOoDataReader.
-	   *
-*    ÄNDERN !!!
-	   *
-	   */
-
-	/*
-	  try{
-	   ZipFile zf = new ZipFile( fileName );
-	  }
-	  catch(ZipException e){
-
-	  }
-	  */
-
-
-		/* The logic should be structured like this:
+	  /* The logic should be structured like this:
 		 *
 		 * - read paragraphs
 		 * - check paragraphs
@@ -1256,42 +1215,32 @@ public class Writer2QML {
 		 * - convert qstn to simple_qml
 		 * - convert simple_qml to simle_html_questionnaire
 		 *
-		 * - NEW 1: convert paragraphs to QML
+		 * - NEW 1: convert paragraphs to Zofar-QML
 		 * - NEW 2: convert QML to clickable Zofar questionnaire
 		 *
 		 */
 
-       /** read paragraphs **/
 
-       textParagraphList.clear();
-
-	   ZipFile zf = new ZipFile( fileName );
-	   //Titel aus style.xml lesen
-	   //style.xml aus Archiv öffnen
-	   ZipEntry styleEntry = zf.getEntry("styles.xml");
-	   if( styleEntry == null){}
-	   InputStream styleIs = zf.getInputStream( styleEntry );
+	/** read paragraphs **/
 
 
-//SaxHandler zum parsen des comntents wird hier schon erzeugt,
-//Um dort verwaltete Liste Q&D übergeben zu können (siehe oben Kommentar)
-	   W2qOoDataReader handler =  new W2qOoDataReader( textParagraphList );
+	  try {
 
-	   //styles.xml parsen
-//Achtung Q&D siehe oben Kommentar
-	   SaxWriterHeadParReader styleParsingHandler = new SaxWriterHeadParReader( textParagraphList );
-	   SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
-	   saxParser.parse( styleIs, styleParsingHandler );
+		textParagraphList = ODFParagraphsExtractor.extractParagraphsFromODF(fileName);
 
-	   //Inhalt aus content.xml
-	   ZipEntry entry = zf.getEntry("content.xml");
-	   InputStream is = zf.getInputStream( entry );
+	} catch (IOException | ParserConfigurationException | SAXException e1) {
 
-	   //DefaultHandler handler = new w2qOoDataReader( fileName );
-	   //Nicht als Defaulthandler erzeugen, w2q eigenschaften werden gebraucht
-	   //w2qOoDataReader handler =  new w2qOoDataReader( fileName );
-	   saxParser = SAXParserFactory.newInstance().newSAXParser();
-	   saxParser.parse( is, handler );
+		//TODO handle ParserConfigurationException properly
+		//e1.printStackTrace();
+		//Datei ist keine Gültige ODT-Datei
+		//Kein ZIP oder kein content/style.xml oder content-style nicht wohlgeformt
+		 MessageBox messageBox = new MessageBox( shell, SWT.ICON_ERROR );
+		 messageBox.setText( "Writer2QML: Fehler" );
+		 messageBox.setMessage( "Die ausgewählte Datei ist keine gültige OpenOffice.org Writer Datei" );
+		 messageBox.open();
+
+		 return;
+	}
 
 
 	   /** check paragraphs **/
@@ -1670,38 +1619,13 @@ public class Writer2QML {
 	   }// Fehler sind vorhanden
 
 
-
-
-	  //Das muss doch bestimmt nach oben??
-	  //Verschiedenen Fehler, Zip, Parser, Datei unterscheiden und abfangen
-	   zf.close();
-	 } catch( Throwable t ) {
-
-		 //TDO später löschen
-		 t.printStackTrace();
-
-
-		 //Datei ist keine Gültige ODT-Datei
-		 //Kein ZIP oder kein content/style.xml oder content-style nicht wohlgeformt
-		 MessageBox messageBox = new MessageBox( shell, SWT.ICON_ERROR );
-		 messageBox.setText( "Writer2QML: Fehler" );
-		 messageBox.setMessage( "Die ausgewählte Datei ist keine gültige OpenOffice.org Writer Datei" );
-		 messageBox.open();
-
-	   }
-
-
-
-
   } //convertWriterFile()
-
 
 
 
   public static void main (String [] args) {
     new Writer2QML();
   }
-
 
 
 

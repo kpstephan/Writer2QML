@@ -19,7 +19,7 @@
 
 */
 
-package main;
+package model.converter;
 
 import java.util.ArrayList;
 
