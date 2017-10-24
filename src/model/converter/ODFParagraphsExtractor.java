@@ -57,7 +57,7 @@ public class ODFParagraphsExtractor {
 
 
 			//styles.xml parsen
-			SaxHandlerODFDocumentHead styleParsingHandler = new SaxHandlerODFDocumentHead( textParagraphList );
+			ODFDocumentHeadSaxHandler styleParsingHandler = new ODFDocumentHeadSaxHandler( textParagraphList );
 			SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
 			saxParser.parse( styleIs, styleParsingHandler );
 
@@ -67,7 +67,7 @@ public class ODFParagraphsExtractor {
 
 
 		    //w2qOoDataReader handler =  new w2qOoDataReader( fileName );
-			SaxHandlerODFDocumentBody handler =  new SaxHandlerODFDocumentBody( textParagraphList );
+			ODFDocumentBodySaxHandler handler =  new ODFDocumentBodySaxHandler( textParagraphList );
 			saxParser = SAXParserFactory.newInstance().newSAXParser();
 			saxParser.parse( is, handler );
 

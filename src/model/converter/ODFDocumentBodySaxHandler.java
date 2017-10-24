@@ -55,7 +55,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import model.writerparagraphs.TextParagraph;
 import model.writerparagraphs.TextParagraphList;
 
-	public class SaxHandlerODFDocumentBody extends DefaultHandler{
+	public class ODFDocumentBodySaxHandler extends DefaultHandler{
 
 
 		/* Dokumentation:
@@ -196,7 +196,7 @@ import model.writerparagraphs.TextParagraphList;
 
 
 		//Konstruktor
-		public SaxHandlerODFDocumentBody( TextParagraphList textParagraphList){
+		public ODFDocumentBodySaxHandler( TextParagraphList textParagraphList){
 
 			this.textParagraphList = textParagraphList;
 
