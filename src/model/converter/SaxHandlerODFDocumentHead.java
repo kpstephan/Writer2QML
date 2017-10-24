@@ -38,7 +38,7 @@ import model.writerparagraphs.TextParagraphList;
  */
 
 
-public class SaxWriterHeadParReader extends DefaultHandler {
+public class SaxHandlerODFDocumentHead extends DefaultHandler {
 
 
 	private TextParagraphList textParagraphList;
@@ -60,7 +60,7 @@ public class SaxWriterHeadParReader extends DefaultHandler {
 
 
 	//Konstruktor
-	public SaxWriterHeadParReader( TextParagraphList textParagraphList ){
+	public SaxHandlerODFDocumentHead( TextParagraphList textParagraphList ){
 
 		this.textParagraphList = textParagraphList;
 		//this.writerContentBuffer = writerContentBuffer;

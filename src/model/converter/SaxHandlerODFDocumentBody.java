@@ -55,7 +55,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import model.writerparagraphs.TextParagraph;
 import model.writerparagraphs.TextParagraphList;
 
-	public class W2qOoDataReader extends DefaultHandler{
+	public class SaxHandlerODFDocumentBody extends DefaultHandler{
 
 
 		/* Dokumentation:
@@ -196,7 +196,7 @@ import model.writerparagraphs.TextParagraphList;
 
 
 		//Konstruktor
-		public W2qOoDataReader( TextParagraphList textParagraphList){
+		public SaxHandlerODFDocumentBody( TextParagraphList textParagraphList){
 
 			this.textParagraphList = textParagraphList;
 
