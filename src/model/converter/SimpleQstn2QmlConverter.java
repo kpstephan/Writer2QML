@@ -19,11 +19,21 @@
 
 */
 
-package model.simplequestionnaire;
+package model.converter;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Iterator;
+
+import model.simplequestionnaire.Category;
+import model.simplequestionnaire.Item;
+import model.simplequestionnaire.Qstn;
+import model.simplequestionnaire.QstnChoices;
+import model.simplequestionnaire.QstnComponent;
+import model.simplequestionnaire.QstnInstruction;
+import model.simplequestionnaire.QstnIntro;
+import model.simplequestionnaire.QstnQuestion;
+import model.simplequestionnaire.QstnSection;
 
 
 /*
@@ -33,7 +43,7 @@ import java.util.Iterator;
  */
 
 
-public class Model2QmlConverter {
+public class SimpleQstn2QmlConverter {
 
 	@SuppressWarnings("unused")
 	private File exportFile;
@@ -49,7 +59,7 @@ public class Model2QmlConverter {
 	private int indentLevel;
 
 	//Konstruktor
-	public Model2QmlConverter( QstnComponent qstnComponent, File exportFile  ){
+	public SimpleQstn2QmlConverter( QstnComponent qstnComponent, File exportFile  ){
 
 		this.qstnComponent = qstnComponent;
 		this.exportFile = exportFile;

@@ -78,7 +78,7 @@ import org.xml.sax.SAXException;
 
 import model.converter.ODFParagraphsExtractor;
 import model.converter.Parapgraphs2SimpleQstnConverter;
-import model.simplequestionnaire.Model2QmlConverter;
+import model.converter.SimpleQstn2QmlConverter;
 import model.simplequestionnaire.Qstn;
 import model.writerparagraphs.StyleCodingError;
 import model.writerparagraphs.TextParagraph;
@@ -1278,7 +1278,7 @@ public class Writer2QML {
 		   //Modell nach QML KOnvertieren
 		   //fileName hat keine Bedeutung
 		   //Model2QmlConverter converter = new Model2QmlConverter( handler.getQstn(), new File( xmlFileName ));
-		   Model2QmlConverter converter = new Model2QmlConverter( qstn, new File( xmlFileName ));
+		   SimpleQstn2QmlConverter converter = new SimpleQstn2QmlConverter( qstn, new File( xmlFileName ));
 		   StringBuffer qml = converter.convert();
 
 		   //Ergebnis in anzeigen
